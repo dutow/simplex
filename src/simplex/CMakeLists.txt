@@ -1,0 +1,3 @@
+MODIFY_SCOPE ( simplex )
+
+BUILD_STATIC_LIB (  )
