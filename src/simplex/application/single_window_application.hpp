@@ -8,22 +8,26 @@
 
 namespace simplex {
 
-	class window;
+class window;
 
-	class single_window_application : public application {
-	public:
-		single_window_application(std::wstring title, unsigned int width, unsigned int height);
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// <summary>	Implements a simple single window application. </summary>
+///
+/// <remarks>	Parragi Zsolt, 2015-02-27 </remarks>
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		virtual ~single_window_application();
+class single_window_application : public application {
+   public:
+    single_window_application(std::wstring title, unsigned int width, unsigned int height);
 
-		void run();
+    virtual ~single_window_application();
 
-	protected:
+    void run();
 
-		virtual void render() = 0;
+   protected:
+    virtual void render() = 0;
 
-	private:
-		std::unique_ptr<window> application_window;
-	};
-
+   private:
+    std::unique_ptr<window> application_window;
+};
 }
