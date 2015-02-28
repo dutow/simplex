@@ -28,8 +28,8 @@ class test_application : public simplex::single_window_application {
     }
 
    private:
-    simplex::primitive2d::quad q;   ///< The simplex::primitive2d::quad to process
-    std::unique_ptr<simplex::shader> shader;	///< The shader
+    simplex::primitive2d::quad q;
+    std::unique_ptr<simplex::shader> shader;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
