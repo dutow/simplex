@@ -10,11 +10,18 @@ INITIALIZE_EASYLOGGINGPP
 
 class test_application : public simplex::single_window_application {
    public:
-    test_application() : single_window_application(L"Hello OpenGL", 400, 400) {}
+    test_application() : single_window_application(
+                             L"Hello OpenGL", 400, 400),
+                         q(glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f)) {
+    }
 
     virtual void render() override {
         // nop
+        q.render();
     }
+
+   private:
+    simplex::primitive2d::quad q;
 };
 
 int main() {
