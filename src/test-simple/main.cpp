@@ -12,7 +12,7 @@ class test_application : public simplex::single_window_application {
    public:
     test_application() : single_window_application(L"Hello OpenGL", 400, 400), q(glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f)) {
 
-		std::string vertex_shader(R"xx(#version 330 core
+        std::string vertex_shader(R"xx(#version 330 core
 layout(location = 0) in vec2 vertexPosition_modelspace;
 void main(){
   gl_Position.xy = vertexPosition_modelspace;
@@ -21,11 +21,11 @@ void main(){
 }
 )xx");
 
-		std::string fragment_shader(R"xx(#version 330 core
+        std::string fragment_shader(R"xx(#version 330 core
 out vec3 color;
 void main()
 {
-	color = vec3(1,0,0);
+    color = vec3(1,0,0);
 }
 )xx");
 
@@ -34,13 +34,13 @@ void main()
 
     virtual void render() override {
         // nop
-		shader->activate();
+        shader->activate();
         q.render();
     }
 
    private:
     simplex::primitive2d::quad q;
-	std::unique_ptr<simplex::shader> shader;
+    std::unique_ptr<simplex::shader> shader;
 };
 
 int main() {
