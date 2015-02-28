@@ -10,21 +10,26 @@ namespace simplex {
 
 class window;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
 /// <summary>	Implements a simple single window application. </summary>
-///
-/// <remarks>	Parragi Zsolt, 2015-02-27 </remarks>
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class single_window_application : public application {
    public:
-    single_window_application(std::wstring title, unsigned int width, unsigned int height);
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	Constructor. </summary>
+	///
+	/// <param name="title"> 	The window's title. </param>
+	/// <param name="width"> 	The window's width. </param>
+	/// <param name="height">	The window's height. </param>
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	single_window_application(std::wstring title, unsigned int width, unsigned int height);
 
+    /// <summary>	Destructor. </summary>
     virtual ~single_window_application();
 
-    void run();
+    /// <summary>	Runs the main loop of the application. </summary>
+    virtual void run();
 
    protected:
+    /// <summary>	Renders the scene. </summary>
     virtual void render() = 0;
 
    private:

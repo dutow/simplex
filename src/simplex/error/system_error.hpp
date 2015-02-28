@@ -4,14 +4,25 @@
 #include <exception>
 
 namespace simplex {
+/// <summary>	A system related error. </summary>
 class system_error : public std::exception {
    public:
-    system_error(const std::string errorMsg) : errorMsg(errorMsg) {}
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>	Constructor. </summary>
+    ///
+    /// <param name="errorMsg">	Message describing the error. </param>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    system_error(const std::string error_msg) : error_msg(error_msg) {}
 
-    std::string const& getError() const { return errorMsg; }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>	Gets the error message. </summary>
+    ///
+    /// <returns>	The error message. </returns>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::string const& get_error() const { return error_msg; }
 
    protected:
-    const std::string errorMsg;
+    const std::string error_msg;
 
    private:
     system_error& operator=(const system_error&);
