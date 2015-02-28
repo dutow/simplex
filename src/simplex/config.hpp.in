@@ -1,0 +1,11 @@
+
+#pragma once
+
+// Configuration file for useful simplex settings
+// NOTE: DO NOT put anything in this file requiring compilation in simplex, theese settings should be overridable in the application!
+
+///////////////////////////
+// Magic Asset settings
+
+// if set, overrides the default asset location
+#define SIMPLEX_MAGIC_ASSET_LOCATION "${SIMPLEX_MAGIC_ASSET_LOCATION}"

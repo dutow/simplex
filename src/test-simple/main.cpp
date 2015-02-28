@@ -1,4 +1,9 @@
-
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// file:	G:\cppdev\simplex\src\test-simple\main.cpp
+//
+// summary:	Implements the main class
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#include "test-simple/config.hpp"
 #include "simplex/simplex.hpp"
 
 #include "easylogging++.h"
@@ -8,28 +13,12 @@
 
 INITIALIZE_EASYLOGGINGPP
 
+/// <summary>	A test application. </summary>
 class test_application : public simplex::single_window_application {
    public:
-    test_application() : single_window_application(L"Hello OpenGL", 400, 400), q(glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f)) {
+	   test_application(std::unique_ptr<simplex::program_arguments> program_args) : single_window_application(L"Hello OpenGL", 400, 400, std::move(program_args)), q(glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f)) {
 
-        std::string vertex_shader(R"xx(#version 330 core
-layout(location = 0) in vec2 vertexPosition_modelspace;
-void main(){
-  gl_Position.xy = vertexPosition_modelspace;
-  gl_Position.z = 1.0;
-  gl_Position.w = 1.0;
-}
-)xx");
-
-        std::string fragment_shader(R"xx(#version 330 core
-out vec3 color;
-void main()
-{
-    color = vec3(1,0,0);
-}
-)xx");
-
-        shader = (std::make_unique<simplex::shader>(std::make_unique<simplex::memory_shader_source>("test_shader", vertex_shader, fragment_shader)));
+       shader = (std::make_unique<simplex::shader>(std::make_unique<simplex::asset_shader_source>(*assets, "simple")));
     }
 
     virtual void render() override {
@@ -39,12 +28,20 @@ void main()
     }
 
    private:
-    simplex::primitive2d::quad q;
-    std::unique_ptr<simplex::shader> shader;
+    simplex::primitive2d::quad q;   ///< The simplex::primitive2d::quad to process
+    std::unique_ptr<simplex::shader> shader;	///< The shader
 };
 
-int main() {
-    test_application app;
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// <summary>	Main entry-point for this application. </summary>
+///
+/// <param name="argc">	Number of command-line arguments. </param>
+/// <param name="argv">	Array of command-line argument strings. </param>
+///
+/// <returns>	Exit-code for the process - 0 for success, else an error code. </returns>
+////////////////////////////////////////////////////////////////////////////////////////////////////
+int main(int argc, char** argv) {
+    test_application app(std::make_unique<simplex::program_arguments>(argc, argv));
 
     app.run();
 

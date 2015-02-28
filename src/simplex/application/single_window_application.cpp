@@ -12,8 +12,11 @@
 
 namespace simplex {
 
-single_window_application::single_window_application(std::wstring title, unsigned int width, unsigned int height)
-    : application_window(window::create(*this, title, width, height)) {}
+single_window_application::single_window_application(std::wstring title, unsigned int width, unsigned int height,
+	std::unique_ptr<program_arguments> program_args, asset_loader::constructor asset_loader_constructor)
+	: application(std::move(program_args), asset_loader_constructor), application_window(window::create(*this, title, width, height)) 
+{
+}
 
 void single_window_application::run() {
     application_window->show();

@@ -8,6 +8,7 @@
 
 #include "simplex/drawable/shader.hpp"
 #include "simplex/drawable/memory_shader_source.hpp"
+#include "simplex/drawable/asset_shader_source.hpp"
 
 // primitives
 #include "simplex/drawable/primitive2d/quad.hpp"
