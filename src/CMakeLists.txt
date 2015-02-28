@@ -3,3 +3,5 @@
 ADD_SUBDIRECTORY( simplex )
 
 ADD_SUBDIRECTORY( test-simple )
+
+ADD_SUBDIRECTORY( example-newton-fractal )
