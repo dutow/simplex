@@ -38,10 +38,10 @@ shader::shader(std::unique_ptr<shader_source> _source) : source(std::move(_sourc
         throw exc;
     }
 
-	glDetachShader(program_id, vertex_shader_id);
-	glDetachShader(program_id, fragment_shader_id);
-	glDeleteShader(vertex_shader_id);
-	glDeleteShader(fragment_shader_id);
+    glDetachShader(program_id, vertex_shader_id);
+    glDetachShader(program_id, fragment_shader_id);
+    glDeleteShader(vertex_shader_id);
+    glDeleteShader(fragment_shader_id);
 
     loaded = true;
 }
@@ -87,10 +87,10 @@ void shader::activate() {
     glUseProgram(program_id);
     GLuint result = glGetError();
 
-	if (result != GL_NO_ERROR) {
-		// TODO! automatic reload?
-		LOG(ERROR) << "Lost shader: " << source->name();
-	}
+    if (result != GL_NO_ERROR) {
+        // TODO! automatic reload?
+        LOG(ERROR) << "Lost shader: " << source->name();
+    }
 }
 
 bool shader::is_loaded() {

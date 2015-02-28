@@ -4,14 +4,33 @@
 #include <string>
 
 namespace simplex {
-	class shader_source {
-	public:
-		shader_source(){};
-		virtual ~shader_source(){};
+/// <summary>	A shader's source code & internal name. </summary>
+class shader_source {
+   public:
+    /// <summary>	Default constructor. </summary>
+    shader_source(){};
+    /// <summary>	Destructor. </summary>
+    virtual ~shader_source(){};
 
-		virtual std::string name() = 0;
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>	Gets the internal name. </summary>
+    ///
+    /// <returns>	A std::string. </returns>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    virtual std::string name() = 0;
 
-		virtual std::string vertex_shader() = 0;
-		virtual std::string fragment_shader() = 0;
-	};
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>	Vertex shader source code. </summary>
+    ///
+    /// <returns>	A std::string. </returns>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    virtual std::string vertex_shader() = 0;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>	Fragment shader source code. </summary>
+    ///
+    /// <returns>	A std::string. </returns>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    virtual std::string fragment_shader() = 0;
+};
 }
