@@ -6,7 +6,7 @@
 namespace simplex {
 
 program_arguments::program_arguments(int argc, char* argv[])
-    : executable(boost::filesystem::system_complete(boost::filesystem::path(argv[0])).parent_path()),
+    : executable(boost::filesystem::system_complete(boost::filesystem::path(argv[0]))),
       executable_dir(executable.parent_path()),
       arguments(argv + 1, argv + argc) {}
 
