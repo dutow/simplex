@@ -24,12 +24,11 @@ MACRO( BUILD_EXECUTABLE )
   SET( MYLIBS ${LIBS} ${ARGV} )
 
   FILE( GLOB_RECURSE ${BUILD_SCOPE}-sources *.cpp )
-  FILE( GLOB_RECURSE ${BUILD_SCOPE}-headers *.hpp "${CMAKE_CURRENT_BINARY_DIR}/*.hpp" )
+  FILE( GLOB_RECURSE ${BUILD_SCOPE}-headers *.hpp "${CMAKE_CURRENT_BINARY_DIR}/*.hpp" "${PROJECT_SOURCE_DIR}/assets/${BUILD_SCOPEDIR}/*.glsl" )
 
   ADD_EXECUTABLE( ${BUILD_SCOPE} ${${BUILD_SCOPE}-sources} ${${BUILD_SCOPE}-headers} )
   TARGET_LINK_LIBRARIES(${BUILD_SCOPE} ${MYLIBS})
   #ADD_DEPENDENCIES( ${BUILD_SCOPE} ${ARGV} )
-
   GroupInVisualStudio()
   MagicAssets()
   # TODO: install it!
@@ -39,8 +38,7 @@ ENDMACRO( BUILD_EXECUTABLE )
 
 MACRO( BUILD_STATIC_LIB )
   FILE( GLOB_RECURSE ${BUILD_SCOPE}-sources *.cpp )
-  FILE( GLOB_RECURSE ${BUILD_SCOPE}-headers *.hpp "${CMAKE_CURRENT_BINARY_DIR}/*.hpp" )
-
+  FILE( GLOB_RECURSE ${BUILD_SCOPE}-headers *.hpp "${CMAKE_CURRENT_BINARY_DIR}/*.hpp" "${CMAKE_PROJECT_SOURCE_DIR}/assets/${BUILD_SCOPEDIR}*.glsl" )
   ADD_LIBRARY( ${BUILD_SCOPE} ${${BUILD_SCOPE}-sources} ${${BUILD_SCOPE}-headers} )
 
   GroupInVisualStudio()

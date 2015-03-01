@@ -4,6 +4,7 @@
 MACRO (GroupInVisualStudio)
 	GroupSources (${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 	GroupSources_HPP (${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+	GroupSources_GLSL ("${PROJECT_SOURCE_DIR}/assets/${BUILD_SCOPEDIR}" "${PROJECT_SOURCE_DIR}/assets/${BUILD_SCOPEDIR}")
 ENDMACRO (GroupInVisualStudio)
 
 MACRO (GroupSources rootdir curdir)
@@ -35,6 +36,26 @@ MACRO (GroupSources_HPP rootdir curdir)
 	
 	FOREACH (child ${children})
 		STRING (REPLACE ${rootdir} "Source" groupname ${curdir})
+		STRING (REPLACE "/" "\\" groupname ${groupname})
+		STRING (REPLACE "\\." "" groupname ${groupname})
+		SOURCE_GROUP (${groupname} FILES ${curdir}/${child})
+	ENDFOREACH ()
+ENDMACRO ()
+
+# TODO: refactor
+MACRO (GroupSources_GLSL rootdir curdir)
+	FILE( GLOB children RELATIVE ${curdir} ${curdir}/*)
+	
+	FOREACH (child ${children})
+		IF(IS_DIRECTORY ${curdir}/${child})
+			GroupSources_GLSL(${rootdir} ${curdir}/${child})
+		ENDIF ()
+	ENDFOREACH ()
+	
+	FILE( GLOB children RELATIVE ${curdir} ${curdir}/*.glsl)
+	
+	FOREACH (child ${children})
+		STRING (REPLACE ${rootdir} "Shaders" groupname ${curdir})
 		STRING (REPLACE "/" "\\" groupname ${groupname})
 		STRING (REPLACE "\\." "" groupname ${groupname})
 		SOURCE_GROUP (${groupname} FILES ${curdir}/${child})
