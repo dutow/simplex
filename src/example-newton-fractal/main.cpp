@@ -20,7 +20,7 @@ INITIALIZE_EASYLOGGINGPP
 class newton_fractal_application : public simplex::single_window_application {
    public:
     newton_fractal_application(std::unique_ptr<simplex::program_arguments> program_args)
-        : single_window_application(L"Newton Fractal", 400, 400, std::move(program_args)), poly({ glm::vec2(100.0f, 100.0f), glm::vec2(200.0f, 200.0f) }) {
+		: single_window_application(L"Newton Fractal", 400, 400, std::move(program_args)), poly({ glm::vec2(100.0f, 100.0f), glm::vec2(200.0f, 200.0f), glm::vec2(300.0f, 300.0f) }) {
 
         shaders.add_shader("fractal");
 	

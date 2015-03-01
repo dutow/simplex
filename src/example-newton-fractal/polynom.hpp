@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 
 #include "simplex/drawable/shader.hpp"
@@ -18,5 +19,5 @@ public:
 
 private:
 	std::vector<glm::vec2> roots;
-	std::vector<glm::vec4> computed_multipliers;
+	std::vector<glm::vec3> colors;
 };
