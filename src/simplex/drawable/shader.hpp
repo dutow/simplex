@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 #include <GL/glew.h>
 #include <glm/mat4x4.hpp>
 
@@ -34,8 +35,45 @@ class shader {
     /// <summary>	Activates this shader. </summary>
     void activate();
 
-	// uniform functions
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	bind an integer. </summary>
+	///
+	/// <param name="name"> 	The name. </param>
+	/// <param name="value">	The value. </param>
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	void uniform_int(std::string name, int value);
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	Binds a uniform 4x4 matrix. </summary>
+	///
+	/// <param name="name">  	The name of the uniform parameter. </param>
+	/// <param name="matrix">	The matrix. </param>
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 	void uniform_mat4x4(std::string name, glm::mat4x4 matrix);
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	Binds a vec2 vector. </summary>
+	///
+	/// <param name="name">	   	The name of the uniform parameter. </param>
+	/// <param name="vertices">	The vertices. </param>
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	void uniform_vec2fv(std::string name, std::vector<glm::vec2> vertices);
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	Binds a vec3 vector. </summary>
+	///
+	/// <param name="name">	   	The name of the uniform parameter. </param>
+	/// <param name="vertices">	The vertices. </param>
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	void uniform_vec3fv(std::string name, std::vector<glm::vec3> vertices);
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	Binds a vec4 vector. </summary>
+	///
+	/// <param name="name">	   	The name of the uniform parameter. </param>
+	/// <param name="vertices">	The vertices. </param>
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	void uniform_vec4fv(std::string name, std::vector<glm::vec4> vertices);
 
    private:
     std::unique_ptr<shader_source> source;  ///< Source for the
@@ -54,6 +92,10 @@ class shader {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     GLuint compile_shader(GLuint shader_type, std::string shader_name, std::string shader_source);
 
+	GLint get_uniform_loc(std::string name) const;
+	
     void unload();
 };
+
+
 }
