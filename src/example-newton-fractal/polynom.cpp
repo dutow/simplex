@@ -61,24 +61,26 @@ void polynom::update(uint64_t elapsed_microseconds)
 
 	for (int i = 0; i < roots.size(); i++) {
 		// wall collisions : walls are vertical or horizontal, so speedcomponent * -1 is a good answer
-		if (roots[i].x < 0) {
+		if (roots[i].x < 10) {
 			roots[i].x *= -1;
+			roots[i].x += 20;
 			velocities[i].x *= -1;
 		}
-		if (roots[i].x > canvas_size.x) {
+		if (roots[i].x > (canvas_size.x-10)) {
 			roots[i].x *= -1;
-			roots[i].x += 2*canvas_size.x;
+			roots[i].x += 2*(canvas_size.x-10);
 			velocities[i].x *= -1;
 		}
 		
 		
-		if (roots[i].y < 0) {
+		if (roots[i].y < 10) {
 			roots[i].y *= -1;
+			roots[i].y += 20;
 			velocities[i].y *= -1;
 		}
-		if (roots[i].y > canvas_size.y) {
+		if (roots[i].y > canvas_size.y-10) {
 			roots[i].y *= -1;
-			roots[i].y += 2 * canvas_size.y;
+			roots[i].y += 2 * (canvas_size.y-10);
 			velocities[i].y *= -1;
 		}
 	}
