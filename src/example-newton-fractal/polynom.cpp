@@ -2,6 +2,7 @@
 #include "polynom.hpp"
 
 #include <easylogging++.h>
+#include <glm/geometric.hpp>
 
 #include "simplex/error/application_error.hpp"
 
@@ -25,8 +26,41 @@ void polynom::modify(simplex::shader& target)
 void polynom::update(uint64_t elapsed_microseconds)
 {
 	for (int i = 0; i < roots.size(); i++) {
-		// wall collisions : walls are vertical or horizontal, so speedcomponent * -1 is a good answer
+
 		roots[i].x += velocities[i].x * (elapsed_microseconds / 1000000.0f);
+		roots[i].y += velocities[i].y * (elapsed_microseconds / 1000000.0f);
+	}
+
+	const int root_radius = 10;
+
+	for (int i = 0; i < roots.size() - 1; i++) {
+		auto& root_i = roots[i];
+		auto& velocity_i = velocities[i];
+		for (int j = i + 1; j < roots.size(); j++) {
+			auto& root_j = roots[j];
+			auto& velocity_j = velocities[j];
+
+			if (abs(root_i.x - root_j.x) <= 2 * root_radius || abs(root_i.y - root_j.y) <= 2 * root_radius) {
+				if (glm::distance(root_i, root_j) <= 2 * root_radius) {
+					// we collided! masses are the same, that means they switch speed components
+					auto tmp = velocity_i;
+					velocity_i.x = velocity_j.x;
+					velocity_i.y = velocity_j.y;
+					velocity_j.x = tmp.x;
+					velocity_j.y = tmp.y;
+
+					// fix positions
+					root_i.x += velocity_i.x * (elapsed_microseconds / 1000000.0f);
+					root_i.y += velocity_i.y * (elapsed_microseconds / 1000000.0f);
+					root_j.x += velocity_j.x * (elapsed_microseconds / 1000000.0f);
+					root_j.y += velocity_j.y * (elapsed_microseconds / 1000000.0f);
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i < roots.size(); i++) {
+		// wall collisions : walls are vertical or horizontal, so speedcomponent * -1 is a good answer
 		if (roots[i].x < 0) {
 			roots[i].x *= -1;
 			velocities[i].x *= -1;
@@ -37,7 +71,7 @@ void polynom::update(uint64_t elapsed_microseconds)
 			velocities[i].x *= -1;
 		}
 		
-		roots[i].y += velocities[i].y * (elapsed_microseconds / 1000000.0f);
+		
 		if (roots[i].y < 0) {
 			roots[i].y *= -1;
 			velocities[i].y *= -1;
