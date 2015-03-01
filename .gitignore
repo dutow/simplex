@@ -19,7 +19,6 @@ latex
 *.vcxproj.user
 *.sdf
 *.opensdf
-Win32
 ipch
 *.suo
 cmakeinit.bat
