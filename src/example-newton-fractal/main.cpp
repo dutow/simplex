@@ -35,10 +35,10 @@ class newton_fractal_application : public simplex::single_window_application {
 		
         drawables["quad01"].render();
     }
-	virtual bool on_resize(glm::ivec2 new_size) {
+	virtual bool on_resize(simplex::window& wnd, glm::ivec2 new_size) {
 		poly.resize_canvas(new_size);
 
-		return single_window_application::on_resize(new_size);
+		return single_window_application::on_resize(wnd, new_size);
 	}
 private:
     polynom poly;

@@ -48,7 +48,9 @@ class single_window_application : public application {
 
     // EVENT CALLBACKS
 
-    virtual bool on_resize(glm::ivec2 new_size);
+    virtual bool on_resize(window& wnd, glm::ivec2 new_size);
+
+    virtual bool on_quit(window& wnd);
 
    private:
     std::unique_ptr<shader_manager> _shaders;      ///< Shader manager

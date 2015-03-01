@@ -46,9 +46,15 @@ void single_window_application::run() {
 
 single_window_application::~single_window_application() {}
 
-bool single_window_application::on_resize(glm::ivec2 new_size) {
+bool single_window_application::on_resize(window& wnd, glm::ivec2 new_size) {
     glViewport(0, 0, new_size.x, new_size.y);
     orthogonal_projection_screensize = glm::ortho(0.0f, static_cast<float>(new_size.x), 0.0f, static_cast<float>(new_size.y));
     return true;
 }
+
+bool single_window_application::on_quit(window& wnd)
+{
+	return true;
+}
+
 }

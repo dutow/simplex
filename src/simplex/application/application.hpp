@@ -9,6 +9,8 @@
 
 namespace simplex {
 
+	class window;
+
 /// <summary>	Minimal class representing an application. </summary>
 class application {
    public:
@@ -41,7 +43,15 @@ class application {
     ///
     /// <returns>	true if event was handled, false if not. </returns>
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    virtual bool on_resize(glm::ivec2 new_size) = 0;
+	virtual bool on_resize(window& wnd, glm::ivec2 new_size) = 0;
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	Called when the application received a close window request. </summary>
+	///
+	/// <returns>	true if the window can be closed. </returns>
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	virtual bool on_quit(window& wnd) = 0;
+
 
    protected:
     std::unique_ptr<program_arguments> program_args;
