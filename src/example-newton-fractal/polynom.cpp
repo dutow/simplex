@@ -92,15 +92,15 @@ void polynom::randomize()
 	velocities.clear();
 
 	//int no_roots = rand() % 13 + 3;
-	int no_roots = rand() % 3 + 3;
+	int no_roots = rand(3) + 3;
 
 	int max_l = canvas_size.x > canvas_size.y ? canvas_size.x : canvas_size.y;
 	int max_speed = max_l / 10;
 	int base = max_speed * 2 * 10;
 
 	for (int i = 0; i < no_roots; i++) {
-		velocities.push_back(glm::vec2(rand() % base / 10.0f - 10.0f, rand() % base / 10.0f - 10.0f));
-		roots.push_back(glm::vec2(rand() % canvas_size.x, rand() % canvas_size.y));
+		velocities.push_back(glm::vec2(rand(base) / 10.0f - 10.0f, rand(base) / 10.0f - 10.0f));
+		roots.push_back(glm::vec2(rand(canvas_size.x), rand(canvas_size.y)));
 	}
 }
 
@@ -118,6 +118,11 @@ void polynom::resize_canvas(glm::ivec2 new_size)
 
 	canvas_size = new_size;
 
+}
+
+int polynom::rand(int max)
+{
+	return std::uniform_int_distribution<>(0, max)(eng);
 }
 
 

@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <cstdint>
+#include <random>
+#include <chrono>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
@@ -30,4 +32,10 @@ private:
 	std::vector<glm::vec3> colors;
 
 	glm::ivec2 canvas_size;
+
+	int rand(int max);
+
+	// RNG state
+	std::mt19937 eng{ static_cast<unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()) };
+
 };
