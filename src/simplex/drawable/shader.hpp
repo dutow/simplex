@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include <GL/glew.h>
+#include <glm/mat4x4.hpp>
 
 namespace simplex {
 
@@ -33,8 +34,11 @@ class shader {
     /// <summary>	Activates this shader. </summary>
     void activate();
 
+	// uniform functions
+	void uniform_mat4x4(std::string name, glm::mat4x4 matrix);
+
    private:
-    std::unique_ptr<shader_source> source;
+    std::unique_ptr<shader_source> source;  ///< Source for the
 
     GLuint program_id;
     bool loaded;

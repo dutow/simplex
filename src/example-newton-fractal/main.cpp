@@ -3,7 +3,7 @@
 //
 // summary:	Implements the main class
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "test-simple/config.hpp"
+#include "example-newton-fractal/config.hpp"
 #include "simplex/simplex.hpp"
 
 #include "easylogging++.h"
@@ -24,6 +24,7 @@ class newton_fractal_application : public simplex::single_window_application {
     virtual void render() override {
         // nop
         shader->activate();
+		shader->uniform_mat4x4("projection", orthogonal_projection_01);
         q.render();
     }
 

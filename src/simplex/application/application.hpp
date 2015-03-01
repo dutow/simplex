@@ -2,6 +2,7 @@
 #pragma once
 
 #include <memory>
+#include <glm/vec2.hpp>
 
 #include "simplex/assets/magic_asset_loader.hpp"
 #include "simplex/application/program_arguments.hpp"
@@ -27,6 +28,9 @@ class application {
     virtual void run() = 0;
 
 	program_arguments const& get_program_args() const { return *program_args; }
+
+	virtual bool on_resize(glm::ivec2 new_size) = 0;
+
 
 protected:
     std::unique_ptr<program_arguments> program_args;

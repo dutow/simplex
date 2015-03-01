@@ -6,6 +6,9 @@
 
 #include "simplex/drawable/shader_source.hpp"
 #include "simplex/error/shader_error.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 
 namespace simplex {
 
@@ -98,4 +101,15 @@ bool shader::is_loaded() {
 
     return loaded;
 }
+
+void shader::uniform_mat4x4(std::string name, glm::mat4x4 matrix)
+{
+	GLint uniform_loc = glGetUniformLocation(program_id, name.c_str());
+	if (uniform_loc != 0) {
+		LOG(FATAL) << "Probably uniform not found? " << uniform_loc;
+	}
+
+	glUniformMatrix4fv(uniform_loc, 1, false, glm::value_ptr(matrix));
+}
+
 }
