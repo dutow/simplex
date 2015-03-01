@@ -8,6 +8,7 @@
 #include "simplex/application/application.hpp"
 #include "simplex/drawable/drawable_manager.hpp"
 #include "simplex/drawable/shader_manager.hpp"
+#include "simplex/application/clock.hpp"
 
 namespace simplex {
 
@@ -35,8 +36,12 @@ class single_window_application : public application {
     virtual void run();
 
    protected:
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// <summary>	Renders the scene. </summary>
-    virtual void render() = 0;
+    ///
+    /// <param name="elapsed_microseconds">	Elapsed microseconds since the previous call. </param>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    virtual void render(uint64_t elapsed_microseconds) = 0;
 
     glm::mat4 orthogonal_projection_screensize;  ///< Orthogonal projection matching the window size for 2D applications
     glm::mat4 orthogonal_projection_01;          ///< Orthogonal projection between 0..1
@@ -51,11 +56,15 @@ class single_window_application : public application {
 
     std::unique_ptr<window> application_window;
 
+    clock clk;
+
    protected:  // to fix initialization order
     // references to some members for nicer syntax
     // This is a class with few instances, memory footprint won't be a problem
 
     shader_manager& shaders;      ///< Shader manager
     drawable_manager& drawables;  ///< Drawable manager
+
+    
 };
 }

@@ -21,7 +21,7 @@ class test_application : public simplex::single_window_application {
        shader = (std::make_unique<simplex::shader>(std::make_unique<simplex::asset_shader_source>(*assets, "simple")));
     }
 
-    virtual void render() override {
+	   virtual void render(uint64_t elapsed_microseconds) override {
         // nop
         shader->activate();
         q.render();

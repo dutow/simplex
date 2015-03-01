@@ -27,3 +27,8 @@ void polynom::modify(simplex::shader& target)
 	target.uniform_int("no_roots", static_cast<int>(roots.size()));
 }
 
+void polynom::update(uint64_t elapsed_microseconds)
+{
+	roots[0].y += elapsed_microseconds / 100000.0f;
+}
+

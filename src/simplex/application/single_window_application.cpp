@@ -23,6 +23,7 @@ single_window_application::single_window_application(std::wstring title, unsigne
       _shaders(std::make_unique<shader_manager>(*assets)),
       _drawables(std::make_unique<drawable_manager>()),
       application_window(window::create(*this, title, width, height)),
+      clk(),
       shaders(*_shaders),
       drawables(*_drawables) {
     // add the 0..1 quad to the drawables, it's always useful
@@ -31,13 +32,15 @@ single_window_application::single_window_application(std::wstring title, unsigne
 
 void single_window_application::run() {
     application_window->show();
+    clk = clock(); // reset clock at the beginning
+	uint64_t elapsed = 0;
     while (application_window->is_running()) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
 
-        render();
-
+        render(elapsed);
         application_window->swap_buffers();
+		elapsed = clk.elapsed_microseconds();
     }
 }
 

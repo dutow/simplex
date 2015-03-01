@@ -26,12 +26,13 @@ class newton_fractal_application : public simplex::single_window_application {
 	
     }
 
-    virtual void render() override {
+    virtual void render(uint64_t elapsed_microseconds) override {
         auto& shader = shaders["fractal"];
         shader.activate();
+		poly.update(elapsed_microseconds);
 		poly.modify(shader);
         shader.uniform_mat4x4("projection", orthogonal_projection_01);
-
+		
         drawables["quad01"].render();
     }
 

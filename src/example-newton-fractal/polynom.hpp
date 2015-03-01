@@ -2,6 +2,7 @@
 #pragma once
 
 #include <vector>
+#include <cstdint>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
@@ -16,6 +17,8 @@ public:
 	~polynom();
 
 	virtual void modify(simplex::shader& target);
+
+	void update(uint64_t elapsed_microseconds);
 
 private:
 	std::vector<glm::vec2> roots;
