@@ -37,8 +37,8 @@ INCLUDE( GetBoost )
 MESSAGE ( STATUS ${BOOTSTRAP_THIRDPARTYLIBS_ARGS} )
 
 add_custom_target(gen_real_cmake ALL
-	COMMAND cd ../
-	COMMAND cmake ${BOOTSTRAP_THIRDPARTYLIBS_ARGS}
+	COMMAND cd ..
+	COMMAND ${CMAKE_COMMAND} ${BOOTSTRAP_THIRDPARTYLIBS_ARGS} -DSIMPLEX_MAGIC_ASSETS="${SIMPLEX_MAGIC_ASSETS}"
 )
 	
 add_dependencies(gen_real_cmake glm glew sfml boost mruby easylogging)
