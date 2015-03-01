@@ -16,21 +16,20 @@ INITIALIZE_EASYLOGGINGPP
 /// <summary>	A test application. </summary>
 class newton_fractal_application : public simplex::single_window_application {
    public:
-	   newton_fractal_application(std::unique_ptr<simplex::program_arguments> program_args) : single_window_application(L"Newton Fractal", 400, 400, std::move(program_args)), q(glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f)) {
+    newton_fractal_application(std::unique_ptr<simplex::program_arguments> program_args)
+        : single_window_application(L"Newton Fractal", 400, 400, std::move(program_args)) {
 
-       shader = (std::make_unique<simplex::shader>(std::make_unique<simplex::asset_shader_source>(*assets, "fractal")));
+        shaders.add_shader("fractal");
     }
 
     virtual void render() override {
-        // nop
-        shader->activate();
-		shader->uniform_mat4x4("projection", orthogonal_projection_01);
-        q.render();
+        auto& shader = shaders["fractal"];
+        shader.activate();
+        shader.uniform_mat4x4("projection", orthogonal_projection_01);
+
+        drawables["quad01"].render();
     }
 
-   private:
-    simplex::primitive2d::quad q;
-    std::unique_ptr<simplex::shader> shader;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
