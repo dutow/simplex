@@ -57,4 +57,9 @@ bool single_window_application::on_quit(window& wnd)
 	return true;
 }
 
+bool single_window_application::on_char(window& wnd, char chr)
+{
+	return false;
+}
+
 }

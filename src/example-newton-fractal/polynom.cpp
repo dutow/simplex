@@ -6,7 +6,7 @@
 
 #include "simplex/error/application_error.hpp"
 
-polynom::polynom(glm::ivec2 canvas_size) : canvas_size(canvas_size), colors({ glm::vec3(1, 0, 0), glm::vec3(0, 1, 0), glm::vec3(0, 0, 1), glm::vec3(1, 1, 0), glm::vec3(1, 0, 1), glm::vec3(0, 1, 1) })
+polynom::polynom(glm::ivec2 canvas_size) : canvas_size(canvas_size), colors({ glm::vec3(1, 0, 0), glm::vec3(0, 1, 0), glm::vec3(0, 0, 1), glm::vec3(1, 1, 0), glm::vec3(1, 0, 1), glm::vec3(0, 1, 1), glm::vec3(1, 0.5f, 0), glm::vec3(1, 0, 0.5f), glm::vec3(0, 1, 0.5f), glm::vec3(0.5f, 1, 0), glm::vec3(0.5f, 0, 1), glm::vec3(0, 0.5f, 1) })
 {
 	randomize();
 }
@@ -94,15 +94,24 @@ void polynom::randomize()
 	//int no_roots = rand() % 13 + 3;
 	int no_roots = rand(3) + 3;
 
+	for (int i = 0; i < no_roots; i++) {
+		add_random_root();
+	}
+}
+
+void polynom::add_random_root()
+{
 	int max_l = canvas_size.x > canvas_size.y ? canvas_size.x : canvas_size.y;
 	int max_speed = max_l / 10;
 	int base = max_speed * 2 * 10;
 
-	for (int i = 0; i < no_roots; i++) {
-		velocities.push_back(glm::vec2(rand(base) / 10.0f - 10.0f, rand(base) / 10.0f - 10.0f));
-		roots.push_back(glm::vec2(rand(canvas_size.x), rand(canvas_size.y)));
+	if (velocities.size() >= 12) {
+		return;
 	}
+	velocities.push_back(glm::vec2(rand(base) / 10.0f - 10.0f, rand(base) / 10.0f - 10.0f));
+	roots.push_back(glm::vec2(rand(canvas_size.x), rand(canvas_size.y)));
 }
+
 
 void polynom::resize_canvas(glm::ivec2 new_size)
 {

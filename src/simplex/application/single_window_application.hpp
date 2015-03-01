@@ -52,6 +52,8 @@ class single_window_application : public application {
 
     virtual bool on_quit(window& wnd);
 
+	virtual bool on_char(window& wnd, char chr);
+
    private:
     std::unique_ptr<shader_manager> _shaders;      ///< Shader manager
     std::unique_ptr<drawable_manager> _drawables;  ///< Drawable manager

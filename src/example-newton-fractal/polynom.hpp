@@ -26,6 +26,8 @@ public:
 
 	void randomize();
 
+	void add_random_root();
+
 private:
 	std::vector<glm::vec2> roots;
 	std::vector<glm::vec2> velocities;

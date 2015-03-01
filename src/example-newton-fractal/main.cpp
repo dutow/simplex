@@ -40,6 +40,20 @@ class newton_fractal_application : public simplex::single_window_application {
 
 		return single_window_application::on_resize(wnd, new_size);
 	}
+
+	virtual bool on_char(simplex::window& wnd, char chr) {
+		if (chr == 'r') {
+			poly.randomize();
+			return true;
+		}
+		if (chr == '+') {
+			// add root
+			poly.add_random_root();
+			return true;
+		}
+
+		return false;
+	}
 private:
     polynom poly;
 };
