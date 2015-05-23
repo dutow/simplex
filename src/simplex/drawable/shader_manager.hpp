@@ -8,51 +8,51 @@
 #include "simplex/assets/asset_loader.hpp"
 
 namespace simplex {
-/// <summary>	Manager for shaders. Has method to add/lookup them based on their location. </summary>
+/** Manager for shaders. Has method to add/lookup them based on their location. */
 class shader_manager {
    public:
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// <summary>	Constructor. </summary>
-    ///
-    /// <param name="assets">	Asset loader used by the manager. </param>
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Constructor.
+     *
+     * @param assets Asset loader used by the manager.
+     */
     shader_manager(asset_loader const& assets);
-    /// <summary>	Destructor. </summary>
+    /** Destructor. */
     virtual ~shader_manager();
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// <summary>	Loads and adds a shader. </summary>
-    ///
-    /// <param name="location">	The location of it's files. </param>
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Loads and adds a shader.
+     *
+     * @param location The location of it's files.
+     */
     void add_shader(asset_loader::path const location);
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// <summary>	Query if the manager has a shader with the given location. </summary>
-    ///
-    /// <param name="location">	The location of the shader. </param>
-    ///
-    /// <returns>	true if exists, false if not. </returns>
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Query if the manager has a shader with the given location.
+     *
+     * @param location The location of the shader.
+     *
+     * @return true if exists, false if not.
+     */
     bool has_shader(asset_loader::path const location) const;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// <summary>	Removes the shader described by location. </summary>
-    ///
-    /// <param name="location">	The location. </param>
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Removes the shader described by location.
+     *
+     * @param location The location.
+     */
     void remove_shader(asset_loader::path const location);
 
-    /// <summary>	Removes and destroys all shaders from the manager. </summary>
+    /** Removes and destroys all shaders from the manager. */
     void clear();
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// <summary>	Array indexer operator, returns a shader or throws an exception. </summary>
-    ///
-    /// <param name="location">	The location of the shader. </param>
-    ///
-    /// <returns>	The shader. </returns>
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Array indexer operator, returns a shader or throws an exception.
+     *
+     * @param location The location of the shader.
+     *
+     * @return The shader.
+     */
     shader& operator[](asset_loader::path const location) const;
 
    private:

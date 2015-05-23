@@ -9,25 +9,26 @@
 namespace simplex {
 namespace primitive2d {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-/// <summary>	A quad with given coordinates. </summary>
-///
-/// <remarks>	The implementation doesn't check the coordinates! </remarks>
-////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * A quad with given coordinates.
+ *
+ * @author Zsolt Parragi
+ * @date 2015-05-23
+ */
 class quad : public drawable {
    public:
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// <summary>	Creates a quad with the given size. </summary>
-    ///
-    /// <param name="top_left">	   	The top left coordinate. </param>
-    /// <param name="bottom_right">	The bottom left coordinate. </param>
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Creates a quad with the given size.
+     *
+     * @param top_left     The top left coordinate.
+     * @param bottom_right The bottom left coordinate.
+     */
     quad(glm::vec2 top_left, glm::vec2 bottom_right);
 
     virtual void render();
 private:
-    GLuint vbo_id;
-	GLuint vao_id;
+    GLuint vbo_id;  ///< Identifier for the vbo
+    GLuint vao_id;  ///< Identifier for the vao
 };
 }
-}
+} ///< .

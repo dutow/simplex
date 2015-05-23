@@ -10,26 +10,24 @@ namespace simplex {
 
 class shader;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-/// <summary>
-/// Simulated uniform object, to support ES2. The modify method is called when the object has to
-/// update it's data.
-/// </summary>
-///
-/// <remarks>	Might be linked to multiple shaders. </remarks>
-////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * Simulated uniform object, to support ES2. The modify method is called when the object has to
+ * update it's data.
+ *
+ * ### remarks Might be linked to multiple shaders.
+ */
 class uniform_object {
    public:
-    /// <summary>	Default constructor. </summary>
+    /** Default constructor. */
     uniform_object(){};
-    /// <summary>	Destructor. </summary>
+    /** Destructor. */
     ~uniform_object(){};
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// <summary>	Modifies the shader's uniform parameters.. </summary>
-    ///
-    /// <param name="target">	[in,out] Target shader. </param>
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Modifies the shader's uniform parameters.
+     *
+     * @param [in,out] target Target shader.
+     */
     virtual void modify(shader& target) = 0;
 };
 }

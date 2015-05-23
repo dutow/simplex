@@ -11,68 +11,68 @@ namespace simplex {
 
 class shader_source;
 
-/// <summary>	A GLSL shader. </summary>
+/** A GLSL shader. */
 class shader {
    public:
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// <summary>	Creates and loads a new shader. </summary>
-    ///
-    /// <param name="_source">	Source for the shader programs. </param>
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Creates and loads a new shader.
+     *
+     * @param _source Source for the shader programs.
+     */
     shader(std::unique_ptr<shader_source> _source);
     ~shader();
 
     // void reload();
     // void ensure_loaded();
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// <summary>	Query if this object is loaded in OpenGL. </summary>
-    ///
-    /// <returns>	true if loaded, false if not. </returns>
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Query if this object is loaded in OpenGL.
+     *
+     * @return true if loaded, false if not.
+     */
     bool is_loaded();
 
-    /// <summary>	Activates this shader. </summary>
+    /** Activates this shader. */
     void activate();
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	/// <summary>	bind an integer. </summary>
-	///
-	/// <param name="name"> 	The name. </param>
-	/// <param name="value">	The value. </param>
-	////////////////////////////////////////////////////////////////////////////////////////////////////
+  /**
+   * bind an integer.
+   *
+   * @param name  The name.
+   * @param value The value.
+   */
 	void uniform_int(std::string name, int value);
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	/// <summary>	Binds a uniform 4x4 matrix. </summary>
-	///
-	/// <param name="name">  	The name of the uniform parameter. </param>
-	/// <param name="matrix">	The matrix. </param>
-	////////////////////////////////////////////////////////////////////////////////////////////////////
+  /**
+   * Binds a uniform 4x4 matrix.
+   *
+   * @param name   The name of the uniform parameter.
+   * @param matrix The matrix.
+   */
 	void uniform_mat4x4(std::string name, glm::mat4x4 matrix);
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	/// <summary>	Binds a vec2 vector. </summary>
-	///
-	/// <param name="name">	   	The name of the uniform parameter. </param>
-	/// <param name="vertices">	The vertices. </param>
-	////////////////////////////////////////////////////////////////////////////////////////////////////
+  /**
+   * Binds a vec2 vector.
+   *
+   * @param name     The name of the uniform parameter.
+   * @param vertices The vertices.
+   */
 	void uniform_vec2fv(std::string name, std::vector<glm::vec2> vertices);
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	/// <summary>	Binds a vec3 vector. </summary>
-	///
-	/// <param name="name">	   	The name of the uniform parameter. </param>
-	/// <param name="vertices">	The vertices. </param>
-	////////////////////////////////////////////////////////////////////////////////////////////////////
+  /**
+   * Binds a vec3 vector.
+   *
+   * @param name     The name of the uniform parameter.
+   * @param vertices The vertices.
+   */
 	void uniform_vec3fv(std::string name, std::vector<glm::vec3> vertices);
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	/// <summary>	Binds a vec4 vector. </summary>
-	///
-	/// <param name="name">	   	The name of the uniform parameter. </param>
-	/// <param name="vertices">	The vertices. </param>
-	////////////////////////////////////////////////////////////////////////////////////////////////////
+  /**
+   * Binds a vec4 vector.
+   *
+   * @param name     The name of the uniform parameter.
+   * @param vertices The vertices.
+   */
 	void uniform_vec4fv(std::string name, std::vector<glm::vec4> vertices);
 
    private:
@@ -81,15 +81,15 @@ class shader {
     GLuint program_id;
     bool loaded;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// <summary>	Compiles a shader. </summary>
-    ///
-    /// <param name="shader_type">  	Type of the shader (GL_VERTEX_SHADER or GL_FRAGMENT_SHADER). </param>
-    /// <param name="shader_name">  	Internal name of the shader. </param>
-    /// <param name="shader_source">	The shader source code. </param>
-    ///
-    /// <returns>	A GLuint. </returns>
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Compiles a shader.
+     *
+     * @param shader_type   Type of the shader (GL_VERTEX_SHADER or GL_FRAGMENT_SHADER).
+     * @param shader_name   Internal name of the shader.
+     * @param shader_source The shader source code.
+     *
+     * @return A GLuint.
+     */
     GLuint compile_shader(GLuint shader_type, std::string shader_name, std::string shader_source);
 
 	GLint get_uniform_loc(std::string name) const;

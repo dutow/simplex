@@ -9,53 +9,53 @@
 
 namespace simplex {
 
-/// <summary>	Manager for drawable classes. Has method to add/lookup them based on their internal name. </summary>
+/** Manager for drawable classes. Has method to add/lookup them based on their internal name. */
 class drawable_manager {
    public:
-    /// <summary>	Default constructor. </summary>
+    /** Default constructor. */
     drawable_manager();
 
-    /// <summary>	Destructor. </summary>
+    /** Destructor. */
     virtual ~drawable_manager();
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// <summary>	Adds a drawable to this manager. </summary>
-    ///
-    /// <remarks>	If name already exists, it overwrites it. </remarks>
-    ///
-    /// <param name="name">	   	The internal lookup name. </param>
-    /// <param name="drawable">	The drawable. </param>
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Adds a drawable to this manager.
+     *
+     * @param name     The internal lookup name.
+     * @param drawable The drawable.
+     *
+     * ### remarks If name already exists, it overwrites it.
+     */
     void add_drawable(std::string const name, std::unique_ptr<drawable> drawable);
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// <summary>	Query if the manager has a drawable with the given name. </summary>
-    ///
-    /// <param name="name">	The name of the drawable. </param>
-    ///
-    /// <returns>	true if found, false if not. </returns>
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Query if the manager has a drawable with the given name.
+     *
+     * @param name The name of the drawable.
+     *
+     * @return true if found, false if not.
+     */
     bool has_drawable(std::string const name) const;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// <summary>	Removes the drawable described by name. </summary>
-    ///
-    /// <remarks>	No exception if it doesn't exists, for now. Call it undefined behaviour? </remarks>
-    ///
-    /// <param name="name">	The name of a drawable. </param>
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Removes the drawable described by name.
+     *
+     * @param name The name of a drawable.
+     *
+     * ### remarks No exception if it doesn't exists, for now. Call it undefined behavior?
+     */
     void remove_drawable(std::string const name);
 
-    /// <summary>	Removes (and thus destroys) all drawable classes. </summary>
+    /** Removes (and thus destroys) all drawable classes. */
     void clear();
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// <summary>	Array indexer operator, returns a drawable or throws an exception. </summary>
-    ///
-    /// <param name="name">	The name of the drawable. </param>
-    ///
-    /// <returns>	The drawable. </returns>
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Array indexer operator, returns a drawable or throws an exception.
+     *
+     * @param name The name of the drawable.
+     *
+     * @return The drawable.
+     */
     drawable& operator[](std::string const name) const;
 
    private:

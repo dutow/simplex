@@ -1,8 +1,3 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// file:	G:\cppdev\simplex\src\simplex\application\single_window_application.cpp
-//
-// summary:	Implements the single window application class
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "single_window_application.hpp"
 
@@ -27,7 +22,7 @@ single_window_application::single_window_application(std::wstring title, unsigne
       shaders(*_shaders),
       drawables(*_drawables) {
     // add the 0..1 quad to the drawables, it's always useful
-    drawables.add_drawable("quad01", std::make_unique<primitive2d::quad>(glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f)));
+    drawables.add_drawable("2d_quad01", std::make_unique<primitive2d::quad>(glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f)));
 }
 
 void single_window_application::run() {
