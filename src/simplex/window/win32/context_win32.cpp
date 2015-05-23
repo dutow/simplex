@@ -8,8 +8,13 @@
 #include <GL/wglew.h>
 
 #include "simplex/application/application.hpp"
+#include "simplex/application/keycode.hpp"
 #include "simplex/window/window.hpp"
 #include "simplex/error/system_error.hpp"
+
+#ifdef _WIN32
+#include <windowsx.h>
+#endif
 
 namespace simplex {
 
@@ -110,7 +115,7 @@ boolean context_win32::initialize_opengl(HWND const& window_handle) {
     };
     int iContextAttribs[] =  // TODO: make OpenGL version customizable
         {
-         WGL_CONTEXT_MAJOR_VERSION_ARB, 3, WGL_CONTEXT_MINOR_VERSION_ARB, 3, WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
+         WGL_CONTEXT_MAJOR_VERSION_ARB, 4, WGL_CONTEXT_MINOR_VERSION_ARB, 3, WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
          0  // End of attributes list
         };
 
@@ -155,7 +160,7 @@ LRESULT CALLBACK context_win32::wnd_proc(HWND hWnd, UINT message, WPARAM wParam,
 
     if (message == WM_NCCREATE) {
         wnd = reinterpret_cast<window*>((LONG_PTR)((CREATESTRUCT*)lParam)->lpCreateParams);
-		LOG(INFO) << "WM_NCCCREATE" << wnd;
+        LOG(INFO) << "WM_NCCCREATE" << wnd;
         SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)((CREATESTRUCT*)lParam)->lpCreateParams);
     } else {
         wnd = reinterpret_cast<window*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
@@ -163,27 +168,100 @@ LRESULT CALLBACK context_win32::wnd_proc(HWND hWnd, UINT message, WPARAM wParam,
 
     if (wnd != nullptr) {
 
-		auto& app = wnd->get_application();
+        auto& app = wnd->get_application();
 
-		switch (message) {
-		case WM_SIZE: {
-			auto window_width = static_cast<int>(LOWORD(lParam));
-			auto window_height = static_cast<int>(HIWORD(lParam));
-			
-			
-			if (app.on_resize(*wnd, glm::ivec2(window_width, window_height))) { return 0; }
-		}
-		case WM_CLOSE: {
-			if (app.on_quit(*wnd)) {
-				PostQuitMessage(0);
-			}
-			return 0;
-		}
-		case WM_CHAR: {
-			if (app.on_char(*wnd, static_cast<char>(wParam))) { return 0;  }
-		}
-		}
+        switch (message) {
+            case WM_SIZE: {
+                auto window_width = static_cast<int>(LOWORD(lParam));
+                auto window_height = static_cast<int>(HIWORD(lParam));
 
+                if (app.on_resize(*wnd, glm::ivec2(window_width, window_height))) {
+                    return 0;
+                }
+            }
+            case WM_CLOSE: {
+                if (app.on_quit(*wnd)) {
+                    PostQuitMessage(0);
+                }
+                return 0;
+            }
+            case WM_CHAR: {
+                if (app.on_char(*wnd, static_cast<char>(wParam))) {
+                    return 0;
+                }
+                break;
+            }
+            case WM_KEYDOWN: {
+                int repeatCount = (lParam & 0xffff);
+                if (repeatCount == 1 && app.on_keydown(*wnd, static_cast<keycode>(wParam))) {
+                    return 0;
+                }
+                break;
+            }
+            case WM_KEYUP: {
+                if (app.on_keyup(*wnd, static_cast<keycode>(wParam))) {
+                    return 0;
+                }
+                break;
+            }
+
+            case WM_MOUSEMOVE: {
+              if (app.on_mousemove(*wnd, glm::ivec2(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)))) {
+                return 0;
+              }
+              break;
+            }
+            case WM_LBUTTONDOWN: {
+              if (app.on_mousedown(*wnd, glm::ivec2(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)), mouse_button::LEFT)) {
+                return 0;
+              }
+              break;
+            }
+            case WM_LBUTTONUP: {
+              if (app.on_mouseup(*wnd, glm::ivec2(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)), mouse_button::LEFT)) {
+                return 0;
+              }
+              break;
+            }
+            case WM_RBUTTONDOWN: {
+              if (app.on_mousedown(*wnd, glm::ivec2(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)), mouse_button::RIGHT)) {
+                return 0;
+              }
+              break;
+            }
+            case WM_RBUTTONUP: {
+              if (app.on_mouseup(*wnd, glm::ivec2(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)), mouse_button::RIGHT)) {
+                return 0;
+              }
+              break;
+            }
+            case WM_MBUTTONDOWN: {
+              if (app.on_mousedown(*wnd, glm::ivec2(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)), mouse_button::MIDDLE)) {
+                return 0;
+              }
+              break;
+            }
+            case WM_MBUTTONUP: {
+              if (app.on_mouseup(*wnd, glm::ivec2(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)), mouse_button::MIDDLE)) {
+                return 0;
+              }
+              break;
+            }
+            case WM_XBUTTONDOWN: {
+              if (HIWORD(wParam) == 0) break; // WTF?
+              if (app.on_mousedown(*wnd, glm::ivec2(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)), HIWORD(wParam) == XBUTTON1 ? mouse_button::X1 : mouse_button::X2)) {
+                return 0;
+              }
+              break;
+            }
+            case WM_XBUTTONUP: {
+              if (HIWORD(wParam) == 0) break; // WTF?
+              if (app.on_mouseup(*wnd, glm::ivec2(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)), HIWORD(wParam) == XBUTTON1 ? mouse_button::X1 : mouse_button::X2)) {
+                return 0;
+              }
+              break;
+            }
+        }
     }
 
     return DefWindowProc(hWnd, message, wParam, lParam);

@@ -9,20 +9,20 @@
 
 namespace simplex {
 
-/// <summary>	A win32 window. </summary>
+/** A win32 window. */
 class win32_window : public window {
    public:
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// <summary>	Creates a new window. </summary>
-    ///
-    /// <param name="owner_application">	[in,out] Reference to the running application. </param>
-    /// <param name="title">				The window's title. </param>
-    /// <param name="width">				The window's width. </param>
-    /// <param name="height">				The window's height. </param>
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Creates a new window.
+     *
+     * @param [in,out] owner_application Reference to the running application.
+     * @param title                      The window's title.
+     * @param width                      The window's width.
+     * @param height                     The window's height.
+     */
     win32_window(application& owner_application, std::wstring title, unsigned int width, unsigned int height);
 
-    /// <summary>	Destructor. </summary>
+    /** Destructor. */
     virtual ~win32_window();
 
     virtual bool is_running();
@@ -30,6 +30,8 @@ class win32_window : public window {
     virtual void show();
 
     virtual void swap_buffers();
+
+    virtual void move_cursor_to(glm::ivec2 coord);
 
    protected:
     HWND handle;

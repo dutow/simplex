@@ -4,74 +4,89 @@
 #include <memory>
 #include <string>
 
+#include <glm/vec2.hpp>
+
 namespace simplex {
 
 class application;
 
-/// <summary>	A window. </summary>
+
+/** Represents a mouse button.  
+ * TODO: handle many button mouse better? 
+ */
+enum class mouse_button { LEFT, MIDDLE, RIGHT, X1, X2 };
+
+/** A window. */
 class window {
    public:
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// <summary>	Creates a new window, based on the platform. </summary>
-    ///
-    /// <param name="owner_application">	[in,out] Reference to the running application. </param>
-    /// <param name="title">				The window's title. </param>
-    /// <param name="width">				The window's width. </param>
-    /// <param name="height">				The window's height. </param>
-    ///
-    /// <returns>	A new window </returns>
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Creates a new window, based on the platform.
+     *
+     * @param [in,out] owner_application Reference to the running application.
+     * @param title                      The window's title.
+     * @param width                      The window's width.
+     * @param height                     The window's height.
+     *
+     * @return A new window.
+     */
     static std::unique_ptr<window> create(application& owner_application, std::wstring title, unsigned int width, unsigned int height);
 
-    /// <summary>	Destructor. </summary>
+    /** Destructor. */
     virtual ~window(){};
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// <summary>	Tells if this object is running, true until it gets closed. </summary>
-    ///
-    /// <returns>	true if running, false if not. </returns>
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Tells if this object is running, true until it gets closed.
+     *
+     * @return true if running, false if not.
+     */
     virtual bool is_running() = 0;
 
-    /// <summary>	Shows this window. </summary>
+    /** Shows this window. */
     virtual void show() = 0;
 
-    /// <summary>	Swaps the OpenGL buffers, displaying the content rendered before this call. </summary>
+    /** Swaps the OpenGL buffers, displaying the content rendered before this call. */
     virtual void swap_buffers() = 0;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// <summary>	Returns the window's title. </summary>
-    ///
-    /// <returns>	The title. </returns>
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Move cursor to the given window relative coordinates.
+     *
+     * @param coord The coordinate.
+     */
+    virtual void move_cursor_to(glm::ivec2 coord) = 0;
+
+    /**
+     * Returns the window's title.
+     *
+     * @return The title.
+     */
     std::wstring get_title() const { return title; }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// <summary>	Returns the window's width. </summary>
-    ///
-    /// <returns>	The width. </returns>
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Returns the window's width.
+     *
+     * @return The width.
+     */
     unsigned int get_width() const { return width; }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// <summary>	Returns the window's height. </summary>
-    ///
-    /// <returns>	The height. </returns>
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Returns the window's height.
+     *
+     * @return The height.
+     */
     unsigned int get_height() const { return height; }
 
 	application& get_application() { return owner_application; }
 
 
    protected:
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// <summary>	Protected constructor, to be used by descendants. Should create a new window. </summary>
-    ///
-    /// <param name="owner_application">	[in,out] Reference to the running application. </param>
-    /// <param name="title">				The window's title. </param>
-    /// <param name="width">				The window's width. </param>
-    /// <param name="height">				The window's height. </param>
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Protected constructor, to be used by descendants. Should create a new window.
+     *
+     * @param [in,out] owner_application Reference to the running application.
+     * @param title                      The window's title.
+     * @param width                      The window's width.
+     * @param height                     The window's height.
+     */
     window(application& owner_application, std::wstring title, unsigned int width, unsigned int height)
         : owner_application(owner_application), title(title), width(width), height(height){};
 

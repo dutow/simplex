@@ -37,4 +37,14 @@ bool win32_window::is_running() {
 
     return running;
 }
+
+void win32_window::move_cursor_to(glm::ivec2 coord)
+{
+  POINT p;
+  p.x = coord.x;
+  p.y = coord.y;
+  ClientToScreen(handle, &p);
+  SetCursorPos(p.x,p.y);
+}
+
 }

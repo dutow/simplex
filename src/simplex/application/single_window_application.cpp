@@ -20,7 +20,8 @@ single_window_application::single_window_application(std::wstring title, unsigne
       application_window(window::create(*this, title, width, height)),
       clk(),
       shaders(*_shaders),
-      drawables(*_drawables) {
+      drawables(*_drawables),
+      app_window(*application_window.get()) {
     // add the 0..1 quad to the drawables, it's always useful
     drawables.add_drawable("2d_quad01", std::make_unique<primitive2d::quad>(glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f)));
 }
@@ -33,6 +34,7 @@ void single_window_application::run() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
 
+        event_handlers.on_render(input, app_window, elapsed);
         render(elapsed);
         application_window->swap_buffers();
 		elapsed = clk.elapsed_microseconds();
@@ -54,7 +56,42 @@ bool single_window_application::on_quit(window& wnd)
 
 bool single_window_application::on_char(window& wnd, char chr)
 {
-	return false;
+  return event_handlers.on_char(input, wnd, chr);
+}
+
+bool single_window_application::on_keydown(window& wnd, keycode kc)
+{
+  input.key_states[static_cast<int>(kc)] = true;
+  return event_handlers.on_keydown(input, wnd, kc);
+}
+
+bool single_window_application::on_keyup(window& wnd, keycode kc)
+{
+  input.key_states[static_cast<int>(kc)] = false;
+  return event_handlers.on_keyup(input, wnd, kc);
+}
+
+void single_window_application::move_mouse_to(glm::ivec2 coord)
+{
+  base_type::move_mouse_to(*application_window.get(), coord);
+}
+
+bool single_window_application::on_mousemove(window& wnd, glm::ivec2 coord)
+{
+  input.mouse_coordinates = coord;
+  return event_handlers.on_mousemove(input, wnd, coord);
+}
+
+bool single_window_application::on_mousedown(window& wnd, glm::ivec2 coord, mouse_button btn)
+{
+  input.mouse_buttons[static_cast<int>(btn)] = true;
+  return event_handlers.on_mousedown(input, wnd, coord, btn);
+}
+
+bool single_window_application::on_mouseup(window& wnd, glm::ivec2 coord, mouse_button btn)
+{
+  input.mouse_buttons[static_cast<int>(btn)] = false;
+  return event_handlers.on_mouseup(input, wnd, coord, btn);
 }
 
 }

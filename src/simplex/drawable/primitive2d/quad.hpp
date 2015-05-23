@@ -11,9 +11,6 @@ namespace primitive2d {
 
 /**
  * A quad with given coordinates.
- *
- * @author Zsolt Parragi
- * @date 2015-05-23
  */
 class quad : public drawable {
    public:

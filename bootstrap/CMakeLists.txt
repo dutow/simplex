@@ -30,6 +30,7 @@ ENDIF(DEFINED MAIN_PROJECT_GENERATOR)
 # TARGET DEFINITION
 
 INCLUDE( GetEasylogging )
+INCLUDE( GetSOIL )
 INCLUDE( GetGLM )
 INCLUDE( GetGLEW )
 INCLUDE( GetBoost )
@@ -41,4 +42,4 @@ add_custom_target(gen_real_cmake ALL
 	COMMAND ${CMAKE_COMMAND} ${BOOTSTRAP_THIRDPARTYLIBS_ARGS} -DSIMPLEX_MAGIC_ASSETS="${SIMPLEX_MAGIC_ASSETS}"
 )
 	
-add_dependencies(gen_real_cmake glm glew sfml boost mruby easylogging)
+add_dependencies(gen_real_cmake soil glm glew boost easylogging)

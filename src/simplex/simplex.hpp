@@ -14,5 +14,11 @@
 #include "simplex/drawable/drawable_manager.hpp"
 #include "simplex/drawable/shader_manager.hpp"
 
+// world stuff
+#include "simplex/drawable/world3d/camera.hpp"
+#include "simplex/drawable/world3d/free_camera.hpp"
+
 // primitives
 #include "simplex/drawable/primitive2d/quad.hpp"
+
+#include "simplex/drawable/primitive3d/heightmap.hpp"
