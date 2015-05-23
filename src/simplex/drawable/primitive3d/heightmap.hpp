@@ -1,32 +1,46 @@
 
 #pragma once
 
-#include "simplex/drawable/drawable.hpp"
-
 #include <GL/glew.h>
 #include <glm/vec4.hpp>
+
+
+#include "simplex/drawable/drawable.hpp"
+#include "simplex/drawable/asset_aware.hpp"
+#include "simplex/drawable/shader.hpp"
+#include "simplex/drawable/texture.hpp"
+#include "simplex/drawable/world3d/camera.hpp"
 
 namespace simplex {
   namespace primitive3d {
 
-    /**
-    * A quad with given coordinates.
-    *
-    * @author Zsolt Parragi
-    * @date 2015-05-23
-    */
-    class heightmap : public drawable {
+    class heightmap : public drawable, public asset_aware {
     public:
       /**
       * Creates a heightmap.
       */
-      heightmap();
+      heightmap(texture& terrain_heightmap, world3d::camera& camera, glm::vec2 size);
+      ~heightmap();
 
+      virtual void load_assets(asset_loaders loaders) override;
 
-      virtual void render();
+      virtual void render() override;
+
+      // camera interaction stuff
+      void move_camera_to_center();
+
     private:
-      GLuint vbo_id;  ///< Identifier for the vbo
-      GLuint vao_id;  ///< Identifier for the vao
+      world3d::camera& camera;
+
+      texture& terrain_heightmap;
+
+      glm::vec2 size;
+
+      std::unique_ptr<drawable> terrain_plane;
+
+      shader* terrain_shader;
+
+      
     };
   }
 } ///< .

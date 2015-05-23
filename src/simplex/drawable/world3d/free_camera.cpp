@@ -114,5 +114,13 @@ void free_camera::register_input_handlers(simplex::event_handlers& handlers, sim
       mouse_control.coord_changed = false;
     });
 }
+
+void free_camera::move_to(glm::vec3 position)
+{
+  glm::vec3 direction = camera_look_at - camera_position;
+  camera_position = position;
+  camera_look_at = camera_position + direction;
+}
+
 }
 }

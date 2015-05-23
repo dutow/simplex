@@ -7,37 +7,49 @@
 #include <GL/glew.h>
 #include <glm/vec3.hpp>
 
+#include "simplex/drawable/primitive2d/plane.hpp"
+#include "simplex/drawable/world3d/free_camera.hpp"
+
 namespace simplex {
   namespace primitive3d {
-    heightmap::heightmap() {
+    heightmap::heightmap(texture& terrain_heightmap, world3d::camera& camera, glm::vec2 size) : camera(camera), terrain_heightmap(terrain_heightmap), size(size) {
 
-      // first iteration: a simple, big quad, y-up
-      static const float s = 2.0f;
-      static const float z = 0.0f;
-      std::vector<glm::vec3> vertex_buffer(6);
-      vertex_buffer[0] = glm::vec3(z, z, z);
-      vertex_buffer[1] = glm::vec3(z, z, s);
-      vertex_buffer[2] = glm::vec3(s, z, s);
-
-      vertex_buffer[3] = glm::vec3(s, z, s);
-      vertex_buffer[4] = glm::vec3(s, z, z);
-      vertex_buffer[5] = glm::vec3(z, z, z);
-
-      glGenVertexArrays(1, &vao_id);
-      glBindVertexArray(vao_id);
-
-      glGenBuffers(1, &vbo_id);
-      glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
-      glBufferData(GL_ARRAY_BUFFER, 6 * 3 * sizeof(float), &vertex_buffer[0], GL_STATIC_DRAW);
-
-      glEnableVertexAttribArray(0);
-      glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
-      glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
     }
 
     void heightmap::render() {
-      glBindVertexArray(vao_id);
-      glDrawArrays(GL_TRIANGLES, 0, 6);
+      terrain_heightmap.bind(simplex::texture::unit::UNIT0);
+
+      terrain_shader->activate();
+      terrain_shader->uniform_int("terrain", 0);
+      terrain_shader->uniform_mat4x4("camera", camera.get_mvp_matrix());
+
+      terrain_plane->render();
     }
+
+    void heightmap::load_assets(asset_loaders loaders)
+    {
+      terrain_plane = std::make_unique<simplex::primitive2d::plane>(glm::vec2(0.0f, 0.0f), size, glm::ivec2(128, 128));
+
+      if (!loaders.shaders.has("heightmap")) {
+        loaders.shaders.add("heightmap");
+      }
+      terrain_shader = &loaders.shaders["heightmap"];
+    }
+
+    void heightmap::move_camera_to_center()
+    {
+      world3d::free_camera* fc = dynamic_cast<world3d::free_camera*>(&camera);
+
+      if (fc) {
+        glm::vec3 half(size.x / 2, 3.0f, size.y / 2);
+        fc->move_to(half);
+      }
+    }
+
+    heightmap::~heightmap()
+    {
+
+    }
+
   }
 }

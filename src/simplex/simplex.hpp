@@ -20,6 +20,7 @@
 
 // primitives
 #include "simplex/drawable/primitive2d/quad.hpp"
+#include "simplex/drawable/primitive2d/plane.hpp"
 
 #include "simplex/drawable/primitive3d/heightmap.hpp"
 #include "simplex/drawable/primitive3d/skybox.hpp"

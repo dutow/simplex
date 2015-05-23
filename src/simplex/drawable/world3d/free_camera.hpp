@@ -18,6 +18,8 @@ namespace simplex {
 
       free_camera();
 
+      void move_to(glm::vec3 position);
+
       virtual void update(uint64_t elapsed_microseconds) override;
 
       void set_forward_vector(speed sp);
