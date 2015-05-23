@@ -23,22 +23,28 @@ public:
     : single_window_application(L"Newton Fractal", 400, 400, std::move(program_args)) {
 
     cam.set_clipping(0.01f, 10000.0f);
-
-    drawables.add_drawable("heightmap", std::make_unique<simplex::primitive3d::heightmap>());
-
-    shaders.add_shader("heightmap");
-
     cam.register_input_handlers(event_handlers, app_window);
-  }
+
+    assets.drawables.add("heightmap", std::make_unique<simplex::primitive3d::heightmap>());
+
+    assets.shaders.add("heightmap");
+
+    assets.textures.add("cubemap.jpg", simplex::texture::mode::CUBEMAP);
+
+    skybox = std::make_unique<simplex::primitive3d::skybox>(assets.textures["cubemap.jpg"], cam);
+    skybox->load_assets(assets);
+
+    }
 
   virtual void render(uint64_t elapsed_microseconds) override {
-    auto& shader = shaders["heightmap"];
-    shader.activate();
-
     cam.update(elapsed_microseconds);
 
-    shader.uniform_mat4x4("camera", cam.get_mvp_matrix());
-    drawables["heightmap"].render();
+    skybox->render();
+
+    auto& shader_heightmap = assets.shaders["heightmap"];
+    shader_heightmap.activate();
+    shader_heightmap.uniform_mat4x4("camera", cam.get_mvp_matrix());
+    assets.drawables["heightmap"].render();
   }
 
   virtual bool on_resize(simplex::window& wnd, glm::ivec2 new_size) override {
@@ -49,6 +55,7 @@ public:
 
 private:
   simplex::world3d::free_camera cam;
+  std::unique_ptr<simplex::primitive3d::skybox> skybox;
 };
 
 int main(int argc, char** argv) {

@@ -8,35 +8,31 @@
 
 namespace simplex {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-/// <summary>
-/// A magic asset constructor. Creates an asset loader that might be relative or absolute to the
-/// executable directory.
-/// </summary>
-///
-/// <remarks>
-/// The idea behind this constructor is to force assets to be relative to the executable during a
-/// production build, and at &lt;source_root&gt;/assets during development. With a simple cmake
-/// defined macro, this does exactly that.
-/// </remarks>
-////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * A magic asset constructor. Creates an asset loader that might be relative or absolute to the
+ * executable directory.
+ *
+ * ### remarks The idea behind this constructor is to force assets to be relative to the
+ * executable during a production build, and at &lt;source_root&gt;/assets during development.
+ * With a simple cmake defined macro, this does exactly that.
+ */
 struct magic_asset_constructor {
     const char* path;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// <summary>	Constructor. </summary>
-    ///
-    /// <param name="s">	CMake provided path. </param>
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Constructor.
+     *
+     * @param s CMake provided path.
+     */
     magic_asset_constructor(const char* s) : path(s) {}
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// <summary>	Creates a new asset_loader. </summary>
-    ///
-    /// <param name="args">	The program arguments. </param>
-    ///
-    /// <returns>	A new asset loader. </returns>
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Creates a new asset_loader.
+     *
+     * @param args The program arguments.
+     *
+     * @return A new asset loader.
+     */
     std::unique_ptr<asset_loader> operator()(program_arguments const& args) {
         if (path[0] == '.') {
             return std::make_unique<filesystem_asset_loader>(args.executable_directory() / boost::filesystem::path(path));

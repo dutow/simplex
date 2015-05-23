@@ -26,7 +26,7 @@ class drawable_manager {
      *
      * ### remarks If name already exists, it overwrites it.
      */
-    void add_drawable(std::string const name, std::unique_ptr<drawable> drawable);
+    void add(std::string const name, std::unique_ptr<drawable> drawable);
 
     /**
      * Query if the manager has a drawable with the given name.
@@ -35,7 +35,7 @@ class drawable_manager {
      *
      * @return true if found, false if not.
      */
-    bool has_drawable(std::string const name) const;
+    bool has(std::string const name) const;
 
     /**
      * Removes the drawable described by name.
@@ -44,7 +44,7 @@ class drawable_manager {
      *
      * ### remarks No exception if it doesn't exists, for now. Call it undefined behavior?
      */
-    void remove_drawable(std::string const name);
+    void remove(std::string const name);
 
     /** Removes (and thus destroys) all drawable classes. */
     void clear();

@@ -38,18 +38,40 @@ std::string filesystem_asset_loader::load_asset(fs::path asset_name, std::ios_ba
         LOG(FATAL) << *exc;
         throw exc;
     }
-	fs::path full_path = root_path / asset_name;
+    fs::path full_path = root_path / asset_name;
 
-	std::ifstream t(full_path.string());
-	std::string str;
+    std::ifstream t(full_path.string());
+    std::string str;
 
-	t.seekg(0, std::ios::end);
-	str.reserve(t.tellg());
-	t.seekg(0, std::ios::beg);
+    t.seekg(0, std::ios::end);
+    str.reserve(t.tellg());
+    t.seekg(0, std::ios::beg);
 
-	str.assign((std::istreambuf_iterator<char>(t)),
-		std::istreambuf_iterator<char>());
+    str.assign((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
 
-	return str;
+    return str;
+}
+
+std::vector<uint8_t> filesystem_asset_loader::load_binary_asset(boost::filesystem::path asset_name) const {
+    if (!asset_exists(asset_name)) {
+        auto exc = new asset_not_found_error(asset_name.string());
+        LOG(FATAL) << *exc;
+        throw exc;
+    }
+    fs::path full_path = root_path / asset_name;
+
+    std::ifstream t(full_path.string(), std::ios::binary);
+
+    t.unsetf(std::ios::skipws);
+
+    std::vector<uint8_t> vec;
+
+    t.seekg(0, std::ios::end);
+    vec.reserve(t.tellg());
+    t.seekg(0, std::ios::beg);
+
+    vec.insert(vec.begin(), std::istream_iterator<uint8_t>(t), std::istream_iterator<uint8_t>());
+
+    return vec;
 }
 }

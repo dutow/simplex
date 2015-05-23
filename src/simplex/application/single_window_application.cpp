@@ -15,21 +15,22 @@ single_window_application::single_window_application(std::wstring title, unsigne
     : application(std::move(program_args), asset_loader_constructor),
       orthogonal_projection_screensize(glm::ortho(0.0f, static_cast<float>(width), 0.0f, static_cast<float>(height))),
       orthogonal_projection_01(glm::ortho(0.0f, 1.0f, 0.0f, 1.0f)),
-      _shaders(std::make_unique<shader_manager>(*assets)),
+      _shaders(std::make_unique<shader_manager>(*asset_loader)),
       _drawables(std::make_unique<drawable_manager>()),
+      _textures(std::make_unique<texture_manager>(*asset_loader)),
       application_window(window::create(*this, title, width, height)),
       clk(),
-      shaders(*_shaders),
-      drawables(*_drawables),
+      assets(*_shaders, *_drawables, *_textures),
       app_window(*application_window.get()) {
     // add the 0..1 quad to the drawables, it's always useful
-    drawables.add_drawable("2d_quad01", std::make_unique<primitive2d::quad>(glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f)));
+    assets.drawables.add("2d_quad01", std::make_unique<primitive2d::quad>(glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f)));
+    assets.drawables.add("2d_quad11", std::make_unique<primitive2d::quad>(glm::vec2(-1.0f, -1.0f), glm::vec2(1.0f, 1.0f)));
 }
 
 void single_window_application::run() {
     application_window->show();
     clk = clock(); // reset clock at the beginning
-	uint64_t elapsed = 0;
+  uint64_t elapsed = 0;
     while (application_window->is_running()) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
@@ -37,7 +38,7 @@ void single_window_application::run() {
         event_handlers.on_render(input, app_window, elapsed);
         render(elapsed);
         application_window->swap_buffers();
-		elapsed = clk.elapsed_microseconds();
+    elapsed = clk.elapsed_microseconds();
     }
 }
 
@@ -51,7 +52,7 @@ bool single_window_application::on_resize(window& wnd, glm::ivec2 new_size) {
 
 bool single_window_application::on_quit(window& wnd)
 {
-	return true;
+  return true;
 }
 
 bool single_window_application::on_char(window& wnd, char chr)

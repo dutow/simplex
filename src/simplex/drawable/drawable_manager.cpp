@@ -11,11 +11,11 @@ drawable_manager::drawable_manager() {}
 
 drawable_manager::~drawable_manager() {}
 
-void drawable_manager::add_drawable(std::string const name, std::unique_ptr<drawable> drawable) { drawables[name] = std::move(drawable); }
+void drawable_manager::add(std::string const name, std::unique_ptr<drawable> drawable) { drawables[name] = std::move(drawable); }
 
-bool drawable_manager::has_drawable(std::string const name) const { return drawables.find(name) != drawables.end(); }
+bool drawable_manager::has(std::string const name) const { return drawables.find(name) != drawables.end(); }
 
-void drawable_manager::remove_drawable(std::string const name) { drawables.erase(name); }
+void drawable_manager::remove(std::string const name) { drawables.erase(name); }
 
 void drawable_manager::clear() { drawables.clear(); }
 

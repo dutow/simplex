@@ -11,6 +11,7 @@
 #include "simplex/application/application.hpp"
 #include "simplex/drawable/drawable_manager.hpp"
 #include "simplex/drawable/shader_manager.hpp"
+#include "simplex/drawable/texture_manager.hpp"
 #include "simplex/application/clock.hpp"
 #include "simplex/application/keycode.hpp"
 
@@ -53,6 +54,14 @@ struct event_handlers { // TODO: use a faster signal handler
   boost::signals2::signal<bool(input_state const& input, window& wnd, glm::ivec2 coord), event_signal> on_mousemove;
   boost::signals2::signal<bool(input_state const& input, window& wnd, glm::ivec2 coord, mouse_button btn), event_signal> on_mousedown;
   boost::signals2::signal<bool(input_state const& input, window& wnd, glm::ivec2 coord, mouse_button btn), event_signal> on_mouseup;
+};
+
+struct asset_loaders {
+  shader_manager& shaders;      ///< Shader manager
+  drawable_manager& drawables;  ///< Drawable manager
+  texture_manager& textures;  ///< Texture manager
+
+  asset_loaders(shader_manager& sm, drawable_manager& dm, texture_manager& tm) : shaders(sm), drawables(dm), textures(tm) {}
 };
 
 /** Implements a simple single window application. */
@@ -115,6 +124,7 @@ class single_window_application : public application {
    private:
     std::unique_ptr<shader_manager> _shaders;      ///< Shader manager
     std::unique_ptr<drawable_manager> _drawables;  ///< Drawable manager
+    std::unique_ptr<texture_manager> _textures;  ///< Texture manager
 
     std::unique_ptr<window> application_window;
 
@@ -124,8 +134,8 @@ class single_window_application : public application {
     // references to some members for nicer syntax
     // This is a class with few instances, memory footprint won't be a problem
 
-    shader_manager& shaders;      ///< Shader manager
-    drawable_manager& drawables;  ///< Drawable manager
+
+    asset_loaders assets;
 
     window& app_window;
     

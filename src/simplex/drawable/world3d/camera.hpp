@@ -2,12 +2,14 @@
 #include <glm/vec3.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/mat4x4.hpp>
+#include <boost/core/noncopyable.hpp>
+
   
 #pragma once
 
 namespace simplex {
   namespace world3d {
-    class camera {
+    class camera : private boost::noncopyable {
     public:
       camera();
       virtual ~camera();

@@ -22,7 +22,7 @@ class application {
      * @param asset_loader_constructor The asset factory.
      */
     application(std::unique_ptr<program_arguments> program_args, asset_loader::constructor asset_loader_constructor)
-        : program_args(std::move(program_args)), assets(std::move(asset_loader_constructor(get_program_args()))){};
+      : program_args(std::move(program_args)), asset_loader(std::move(asset_loader_constructor(get_program_args()))){};
 
     /** Destructor. */
     virtual ~application(){};
@@ -100,6 +100,6 @@ class application {
 
    protected:
     std::unique_ptr<program_arguments> program_args;
-    std::unique_ptr<asset_loader> assets;
+    std::unique_ptr<asset_loader> asset_loader;
 };
 }

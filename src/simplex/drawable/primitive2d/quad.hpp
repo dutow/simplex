@@ -22,7 +22,7 @@ class quad : public drawable {
      */
     quad(glm::vec2 top_left, glm::vec2 bottom_right);
 
-    virtual void render();
+    virtual void render() override;
 private:
     GLuint vbo_id;  ///< Identifier for the vbo
     GLuint vao_id;  ///< Identifier for the vao

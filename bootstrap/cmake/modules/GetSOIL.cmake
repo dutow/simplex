@@ -7,7 +7,7 @@
 ExternalProject_Add(
     soil
     PREFIX ${CMAKE_DEPENDENCY_PATH}/build/soil
-    GIT_REPOSITORY https://github.com/paralin/soil.git
+    GIT_REPOSITORY https://github.com/dutow/soil.git
 	INSTALL_DIR ${CMAKE_DEPENDENCY_PATH}/soil
 	INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/inc <INSTALL_DIR>/include
 	COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/soil.lib <INSTALL_DIR>/lib/soil.lib

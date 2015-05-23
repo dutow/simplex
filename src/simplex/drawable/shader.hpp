@@ -6,13 +6,15 @@
 #include <vector>
 #include <GL/glew.h>
 #include <glm/mat4x4.hpp>
+#include <boost/core/noncopyable.hpp>
+
 
 namespace simplex {
 
 class shader_source;
 
 /** A GLSL shader. */
-class shader {
+class shader : private boost::noncopyable {
    public:
     /**
      * Creates and loads a new shader.

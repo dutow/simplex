@@ -18,7 +18,7 @@ class test_application : public simplex::single_window_application {
    public:
 	   test_application(std::unique_ptr<simplex::program_arguments> program_args) : single_window_application(L"Hello OpenGL", 400, 400, std::move(program_args)), q(glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f)) {
 
-       shader = (std::make_unique<simplex::shader>(std::make_unique<simplex::asset_shader_source>(*assets, "simple")));
+       shader = (std::make_unique<simplex::shader>(std::make_unique<simplex::asset_shader_source>(*asset_loader, "simple")));
     }
 
 	   virtual void render(uint64_t elapsed_microseconds) override {
