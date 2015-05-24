@@ -6,6 +6,8 @@
 
 #include "GL/glew.h"
 #include "GL/GL.h"
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform2.hpp>
 
 INITIALIZE_EASYLOGGINGPP
 
@@ -61,7 +63,7 @@ public:
     glDepthFunc(GL_LESS);
     glEnable(GL_DEPTH_TEST);
     
-    //terrain->render();
+    terrain->render();
 
 
     // draw a suzanne
@@ -77,6 +79,13 @@ public:
 
     assets.drawables["suzanne"].render();
 
+
+    rc_raymarch->change_type(simplex::raycast::obj_type::SPHERE);
+    rc_raymarch->change_model_mat(glm::translate<float>(glm::vec3(-2.0f, 1.0f, 0.0f)));
+    rc_raymarch->render();
+
+    rc_raymarch->change_type(simplex::raycast::obj_type::TORUS);
+    rc_raymarch->change_model_mat(glm::translate<float>(glm::vec3(6.0f, 1.0f, 2.0f)));
     rc_raymarch->render();
   }
 

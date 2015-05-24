@@ -1,4 +1,4 @@
-#version 130
+#version 420
 
 // pipeline-ból bejövõ per-fragment attribútumok
 in vec3	 vs_out_pos;
@@ -21,6 +21,10 @@ uniform vec3 center = vec3(0,0,0);
 uniform vec3 sun_direction;
 uniform vec3 sun_color;
 uniform float sun_intensity;
+uniform int object_type;
+
+
+const float epsilon = 0.001;
 
 void getRay(in vec3 inVec, out vec3 rayOrig, out vec3 rayDir)
 {
@@ -40,14 +44,44 @@ void getRay(in vec3 inVec, out vec3 rayOrig, out vec3 rayDir)
 
 uniform float sphere_radius = 1;
 
-float obj_sphere(vec3 p)
+float obj_plane(vec3 p) // ^2
 {
-	return dot(p,p) - sphere_radius;
+	return p.y;
 }
 
-vec3 normal_sphere(vec3 intersectionPoint)
+float obj_sphere(vec3 p) // ^2
 {
-	return normalize(intersectionPoint - center);
+	return length(p) - sphere_radius;
+}
+
+float obj_torus(vec3 p) // ^2
+{
+	vec2 t = vec2(1,0.3);
+	vec2 q = vec2(length(p.xy)-t.x,p.z);
+    return length(q)-t.y;
+}
+
+float obj_curr(vec3 p) {
+	if (object_type == 1) { // SPHERE
+		return obj_sphere(p);
+	}
+	if (object_type == 2) { // TORUS
+		return obj_torus(p);
+	}
+	if (object_type == 3) { // PLANE
+		return obj_plane(p);
+	}
+}
+
+vec3 rm_normal(vec3 point)
+{
+	//return normalize(intersectionPoint - center);
+	
+	float d0 = obj_curr(point);
+    float dX = obj_curr(point - vec3(epsilon, 0.0, 0.0));
+    float dY = obj_curr(point - vec3(0.0, epsilon, 0.0));
+    float dZ = obj_curr(point - vec3(0.0, 0.0, epsilon));
+    return normalize(vec3(dX-d0, dY-d0, dZ-d0));
 }
 
 uniform float INC = 1/16.0f;
@@ -63,13 +97,13 @@ void main()
 
 	// raymarch - scene is around 120x120
 	float t = 0;
-	while ( obj_sphere( rayOrig + t*rayDir ) > 0 && t < 120 )
+	while ( obj_curr( rayOrig + t*rayDir ) > 0 && t < 60 )
 	{
 		t += INC;
 	}
 
 	// ha tul messze van
-	if ( t >= 120 ) {
+	if ( t >= 60 ) {
 		discard;
 	}
 
@@ -80,7 +114,7 @@ void main()
 	// különben számítsuk ki a metszéspontot
 	vec3 intersectionPoint = rayOrig + t*rayDir;
 	
-	vec3 surfaceNormal = normal_sphere(intersectionPoint);
+	vec3 surfaceNormal = rm_normal(intersectionPoint);
 
 	intersectionPoint = (model * vec4(intersectionPoint, 1) ).xyz;
 	surfaceNormal = normalize( ( model * vec4(surfaceNormal, 0) ).xyz);

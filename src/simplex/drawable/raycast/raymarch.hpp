@@ -13,7 +13,7 @@
 namespace simplex {
   namespace raycast {
 
-    enum class obj_type { SPHERE = 1 };
+    enum class obj_type { SPHERE = 1, TORUS = 2, PLANE = 3 };
 
     class raymarch : public drawable, public asset_aware {
     public:
@@ -23,12 +23,17 @@ namespace simplex {
       virtual void load_assets(asset_loaders loaders) override;
 
       virtual void render() override;
+
+      // todo: think about how to store object state
+      void change_model_mat(glm::mat4 model);
+      void change_type(obj_type new_type);
     private:
       shader* rm_shader;
       world3d::camera& camera;
       world3d::uniform_sun& sun;
       obj_type type;
       drawable* quad;
+      glm::mat4 model_mat;
     };
   }
 } ///< .
