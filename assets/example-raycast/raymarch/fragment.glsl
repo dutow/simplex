@@ -126,20 +126,26 @@ float obj_sphere4(vec3 p) // ^4 - alias rounded box
 
 // operators
 
-float opU( float d1, float d2 )
+float opU( float d1, float d2 ) // union
 {
     return min(d1,d2);
 }
 
-float opS( float d1, float d2 )
+float opS( float d1, float d2 ) // substract
 {
     return max(-d1,d2);
 }
 
-float opI( float d1, float d2 )
+float opI( float d1, float d2 ) // intersection
 {
     return max(d1,d2);
 }
+
+float obj_csgtest(vec3 p) // halmazmuvelet teszt
+{
+	return opU(obj_torus(p), opS(obj_triprism(p), opI(obj_sphere(p), obj_torus88(p))));
+}
+
 
 float obj_curr(vec3 p) {
 	if (object_type == 1) { // SPHERE ^2
@@ -168,6 +174,9 @@ float obj_curr(vec3 p) {
 	}
 	if (object_type == 9) { // SPHERE4 ^4
 		return obj_sphere4(p);
+	}
+	if (object_type == 10) { // CSG_TEST
+		return obj_csgtest(p);
 	}
 }
 
