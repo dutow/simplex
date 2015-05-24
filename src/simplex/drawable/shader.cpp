@@ -92,7 +92,7 @@ void shader::activate() {
 
     if (result != GL_NO_ERROR) {
         // TODO! automatic reload?
-        LOG(ERROR) << "Lost shader: " << source->name();
+        LOG(ERROR) << "Lost shader: " << source->name() << " " << result;
     }
 }
 
@@ -141,6 +141,18 @@ void shader::uniform_int(std::string name, int value)
 {
 	GLint uniform_loc = get_uniform_loc(name);
 	glUniform1i(uniform_loc, value);
+}
+
+void shader::uniform_float(std::string name, float value)
+{
+  GLint uniform_loc = get_uniform_loc(name);
+  glUniform1f(uniform_loc, value);
+}
+
+void shader::uniform_vec3f(std::string name, glm::vec3 vec3)
+{
+  GLint uniform_loc = get_uniform_loc(name);
+  glUniform3f(uniform_loc, vec3.x, vec3.y, vec3.z);
 }
 
 }

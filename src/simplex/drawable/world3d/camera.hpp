@@ -24,6 +24,7 @@ namespace simplex {
       virtual void update(uint64_t elapsed_microseconds);
 
       glm::mat4 const& get_mvp_matrix() const;
+      glm::mat4 const& get_view_matrix() const;
 
       glm::vec3 const& get_camera_look_at() const;
       glm::vec3 const& get_camera_direction() const;

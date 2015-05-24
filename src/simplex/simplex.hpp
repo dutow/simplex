@@ -17,6 +17,7 @@
 // world stuff
 #include "simplex/drawable/world3d/camera.hpp"
 #include "simplex/drawable/world3d/free_camera.hpp"
+#include "simplex/drawable/world3d/sun.hpp"
 
 // primitives
 #include "simplex/drawable/primitive2d/quad.hpp"
@@ -24,3 +25,8 @@
 
 #include "simplex/drawable/primitive3d/heightmap.hpp"
 #include "simplex/drawable/primitive3d/skybox.hpp"
+#include "simplex/drawable/primitive3d/sphere.hpp"
+#include "simplex/drawable/primitive3d/cube.hpp"
+#include "simplex/drawable/primitive3d/objfile.hpp"
+
+#include "simplex/drawable/raycast/raymarch.hpp"

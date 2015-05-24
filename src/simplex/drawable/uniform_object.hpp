@@ -21,7 +21,7 @@ class uniform_object {
     /** Default constructor. */
     uniform_object(){};
     /** Destructor. */
-    ~uniform_object(){};
+    virtual ~uniform_object(){};
 
     /**
      * Modifies the shader's uniform parameters.

@@ -7,8 +7,8 @@ namespace simplex {
 namespace world3d {
 
 
-  const float ROTATION_FACTOR = 5.0f;
-  const float MOVEMENT_FACTOR = 5.0f;
+  const float ROTATION_FACTOR = 10.0f;
+  const float MOVEMENT_FACTOR = 25.0f;
 
 glm::vec3 free_camera::forward_one() const { return get_camera_direction(); }
 
@@ -119,7 +119,8 @@ void free_camera::move_to(glm::vec3 position)
 {
   glm::vec3 direction = camera_look_at - camera_position;
   camera_position = position;
-  camera_look_at = camera_position + direction;
+  //camera_look_at = camera_position + direction;
+  camera_look_at = glm::vec3();
 }
 
 }

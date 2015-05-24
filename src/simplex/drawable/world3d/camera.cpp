@@ -101,5 +101,10 @@ namespace simplex {
       return glm::ivec2(viewport_x + viewport_width / 2, viewport_y + viewport_height / 2);
     }
 
+    glm::mat4 const& camera::get_view_matrix() const
+    {
+      return view;
+    }
+
   }
 }

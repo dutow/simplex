@@ -45,6 +45,8 @@ class shader : private boost::noncopyable {
    */
 	void uniform_int(std::string name, int value);
 
+  void uniform_float(std::string name, float value);
+
   /**
    * Binds a uniform 4x4 matrix.
    *
@@ -69,6 +71,8 @@ class shader : private boost::noncopyable {
    */
 	void uniform_vec3fv(std::string name, std::vector<glm::vec3> vertices);
 
+  void uniform_vec3f(std::string name, glm::vec3 vec3);
+  
   /**
    * Binds a vec4 vector.
    *

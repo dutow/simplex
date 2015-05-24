@@ -10,6 +10,7 @@
 #include "simplex/drawable/shader.hpp"
 #include "simplex/drawable/texture.hpp"
 #include "simplex/drawable/world3d/camera.hpp"
+#include "simplex/drawable/world3d/sun.hpp"
 
 namespace simplex {
   namespace primitive3d {
@@ -19,7 +20,7 @@ namespace simplex {
       /**
       * Creates a heightmap.
       */
-      heightmap(texture& terrain_heightmap, world3d::camera& camera, glm::vec2 size);
+      heightmap(texture& terrain_heightmap, world3d::camera& camera, world3d::uniform_sun& sun, glm::vec2 size);
       ~heightmap();
 
       virtual void load_assets(asset_loaders loaders) override;
@@ -31,6 +32,7 @@ namespace simplex {
 
     private:
       world3d::camera& camera;
+      world3d::uniform_sun sun;
 
       texture& terrain_heightmap;
 

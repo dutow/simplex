@@ -12,7 +12,7 @@
 
 namespace simplex {
   namespace primitive3d {
-    heightmap::heightmap(texture& terrain_heightmap, world3d::camera& camera, glm::vec2 size) : camera(camera), terrain_heightmap(terrain_heightmap), size(size) {
+    heightmap::heightmap(texture& terrain_heightmap, world3d::camera& camera, world3d::uniform_sun& sun, glm::vec2 size) : camera(camera), sun(sun), terrain_heightmap(terrain_heightmap), size(size) {
 
     }
 
@@ -22,6 +22,8 @@ namespace simplex {
       terrain_shader->activate();
       terrain_shader->uniform_int("terrain", 0);
       terrain_shader->uniform_mat4x4("camera", camera.get_mvp_matrix());
+
+      sun.modify(*terrain_shader);
 
       terrain_plane->render();
     }
