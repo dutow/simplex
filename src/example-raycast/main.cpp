@@ -72,7 +72,7 @@ public:
     angle_diff += elapsed_microseconds;
     
     float diff = (angle_diff % 120000000) / 120000000.0f * 6.28f;
-
+    rc_raymarch->set_center(campos);
     for (int i = 1; i <= 9; i++) {
       rc_raymarch->change_type(static_cast<simplex::raycast::obj_type>(i));
       for (int n = 1; n <= 3; n++) {
@@ -90,11 +90,12 @@ public:
     auto& std_shader = assets.shaders["standard"];
     std_shader.activate();
     std_shader.uniform_mat4x4("camera", cam.get_mvp_matrix());
+    std_shader.uniform_mat4x4("view", cam.get_view_matrix());
+    std_shader.uniform_vec3f("light_position", campos);
     sun.modify(std_shader);
 
     assets.textures["suzanne.png"].bind(simplex::texture::unit::UNIT0);
     std_shader.uniform_int("tex_diffuse", 0);
-
     for (int i = 1; i <= 9; i++) {
 
       glm::vec3 p = glm::rotateY(glm::vec3(5.0f * 4, 10.0f, 0.0f), (2 * 3.14f / 9.0f * i) + diff);
@@ -103,6 +104,7 @@ public:
       p.y = 15.0f;
 
       std_shader.uniform_mat4x4("model", glm::translate<float>(p));
+      
       assets.drawables["suzanne"].render();
     }
 

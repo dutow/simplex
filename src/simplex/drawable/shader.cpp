@@ -155,4 +155,10 @@ void shader::uniform_vec3f(std::string name, glm::vec3 vec3)
   glUniform3f(uniform_loc, vec3.x, vec3.y, vec3.z);
 }
 
+void shader::uniform_vec4f(std::string name, glm::vec4 vec4)
+{
+  GLint uniform_loc = get_uniform_loc(name);
+  glUniform4f(uniform_loc, vec4.x, vec4.y, vec4.z, vec4.w);
+}
+
 }

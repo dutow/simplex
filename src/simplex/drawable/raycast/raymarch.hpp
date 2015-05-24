@@ -27,6 +27,7 @@ namespace simplex {
       // todo: think about how to store object state
       void change_model_mat(glm::mat4 model);
       void change_type(obj_type new_type);
+      void set_center(glm::vec3 center) { this->center = center; }
     private:
       shader* rm_shader;
       world3d::camera& camera;
@@ -34,6 +35,7 @@ namespace simplex {
       obj_type type;
       drawable* quad;
       glm::mat4 model_mat;
+      glm::vec3 center;
     };
   }
 } ///< .

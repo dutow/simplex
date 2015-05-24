@@ -5,8 +5,10 @@ layout(location = 2) in vec2 vp_texcoord;
 
 uniform mat4 camera;
 uniform mat4 model;
+uniform mat4 view;
 
 out vec4 normal;
+out vec4 eye;
 out vec2 texcoord;
 
 void main(){
@@ -14,6 +16,8 @@ void main(){
   position.xyz = vp_modelspace;
   position.w   = 1.0f;
   position = camera * model * position;
+  
+  eye = -(view * model * position);
 
   normal.xyz = vp_normal;
   normal.w   = 1.0f;

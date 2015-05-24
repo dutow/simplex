@@ -184,6 +184,8 @@ vec3 rm_normal(vec3 point)
 
 uniform float INC = 1/16.0f;
 
+uniform vec3 light_position;
+
 void main()
 {
 	//fs_out_col = vec4(1,1,1,1);
@@ -224,12 +226,30 @@ void main()
 	intersectionPoint = (model * vec4(intersectionPoint, 1) ).xyz;
 	surfaceNormal = normalize( ( model * vec4(surfaceNormal, 0) ).xyz);
 
-	// egyszeru diffuz szin
+	// FENYHEZ
+	// surfaceNormal - normalvektor, modelspace
+	// intersectionPoint - felszin, modelspace
+	// 
+	
+	vec4 point_light = vec4(0.0);
+	
+	vec3 light_dir = light_position.xyz - intersectionPoint.xyz;
+	float light_dist = length(light_dir);
+	light_dir = normalize(light_dir);
+	float light_diffuse = max(0.0, dot(surfaceNormal, -light_dir));
+	// const + lin + exp
+	float light_atttotal = 0.1 + 0.05*light_dist; + 0.1 * light_dist * light_dist;
+	point_light = vec4(0.65,0.65,0.5,1) * (light_diffuse + 0.2) / light_atttotal;
+	//point_light = vec4(light_diffuse);
+	
+	// nap
 	vec3 toLight = normalize(sun_direction);
 	vec4 diffuseColor = vec4(clamp( dot(surfaceNormal, toLight), 0, 1 ));
 	diffuseColor.xyz *= sun_color;
-
-	fs_out_col += diffuseColor * sun_intensity + vec4(0.2f);
+	vec4 sun_light = vec4(0.0);
+	sun_light.xyz = diffuseColor.xyz * sun_intensity;
+	
+	fs_out_col = max(sun_light + point_light, vec4(0.2f));
 
 	// viewport transzformáció: http://www.songho.ca/opengl/gl_transform.html 
 	// gl_DepthRange: http://www.opengl.org/registry/doc/GLSLangSpec.4.30.6.pdf , 130.o. 

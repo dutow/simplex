@@ -72,6 +72,7 @@ class shader : private boost::noncopyable {
 	void uniform_vec3fv(std::string name, std::vector<glm::vec3> vertices);
 
   void uniform_vec3f(std::string name, glm::vec3 vec3);
+  void uniform_vec4f(std::string name, glm::vec4 vec4);
   
   /**
    * Binds a vec4 vector.
