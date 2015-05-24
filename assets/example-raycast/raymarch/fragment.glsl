@@ -182,13 +182,13 @@ float obj_curr(vec3 p) {
 
 vec3 rm_normal(vec3 point)
 {
-	//return normalize(intersectionPoint - center);
+	vec3 eps = vec3( 0.001, 0.0, 0.0 );
 	
-	float d0 = obj_curr(point);
-    float dX = obj_curr(point - vec3(epsilon, 0.0, 0.0));
-    float dY = obj_curr(point - vec3(0.0, epsilon, 0.0));
-    float dZ = obj_curr(point - vec3(0.0, 0.0, epsilon));
-    return normalize(vec3(dX-d0, dY-d0, dZ-d0));
+    vec3 nor = vec3(
+	    obj_curr(point+eps.xyy).x - obj_curr(point-eps.xyy).x,
+	    obj_curr(point+eps.yxy).x - obj_curr(point-eps.yxy).x,
+	    obj_curr(point+eps.yyx).x - obj_curr(point-eps.yyx).x );
+	return nor;
 }
 
 uniform float INC = 1/16.0f;
