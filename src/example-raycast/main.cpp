@@ -8,6 +8,7 @@
 #include "GL/GL.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform2.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 
 INITIALIZE_EASYLOGGINGPP
 
@@ -51,6 +52,8 @@ public:
     rc_raymarch = std::make_unique<simplex::raycast::raymarch>(simplex::raycast::obj_type::SPHERE, cam, sun);
     rc_raymarch->load_assets(assets);
 
+
+    campos = cam.get_camera_position();
     }
 
   virtual void render(uint64_t elapsed_microseconds) override {
@@ -80,19 +83,19 @@ public:
 
     assets.drawables["suzanne"].render();
 
-    glm::vec3 pos;
+    
+    for (int i = 1; i <= 9; i++) {
+      rc_raymarch->change_type(static_cast<simplex::raycast::obj_type>(i));
+      for (int n = 1; n <= 3; n++) {
+        glm::vec3 p = glm::rotateY(glm::vec3(7.0f * n, 1.0f, 0.0f), 2 * 3.14f / 9.0f * i);
+        p.x += campos.x;
+        p.z += campos.z;
+        terrain->ensure_above_terrain(p);
+        rc_raymarch->change_model_mat(glm::translate<float>(p));
+        rc_raymarch->render();
+      }
+    }
 
-    rc_raymarch->change_type(simplex::raycast::obj_type::SPHERE);
-    pos = glm::vec3(10.0f, 1.0f, 10.0f);
-    terrain->ensure_above_terrain(pos);
-    rc_raymarch->change_model_mat(glm::translate<float>(pos));
-    rc_raymarch->render();
-
-    rc_raymarch->change_type(simplex::raycast::obj_type::TORUS);
-    pos = glm::vec3(16.0f, 1.0f, 10.0f);
-    terrain->ensure_above_terrain(pos);
-    rc_raymarch->change_model_mat(glm::translate<float>(pos));
-    rc_raymarch->render();
   }
 
   virtual bool on_resize(simplex::window& wnd, glm::ivec2 new_size) override {
@@ -109,6 +112,8 @@ private:
   std::unique_ptr<simplex::primitive3d::heightmap> terrain;
 
   std::unique_ptr<simplex::raycast::raymarch> rc_raymarch;
+
+  glm::vec3 campos;
 };
 
 int main(int argc, char** argv) {

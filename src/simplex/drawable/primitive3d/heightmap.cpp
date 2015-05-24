@@ -51,7 +51,7 @@ namespace simplex {
       world3d::free_camera* fc = dynamic_cast<world3d::free_camera*>(&camera);
 
       if (fc) {
-        glm::vec3 half(size.x / 2, 3.0f, size.y / 2);
+        glm::vec3 half(size.x / 2, 15.0f, size.y / 2);
         fc->move_to(half);
       }
     }
@@ -84,11 +84,10 @@ namespace simplex {
         ;
 
       if (force || point.y < t_at) {
+        if (force) t_at += 3.0f;
         point.y = t_at;
       }
 
-      LOG(INFO) << point.y;
-      
     }
 
     void heightmap::correct_camera_y()

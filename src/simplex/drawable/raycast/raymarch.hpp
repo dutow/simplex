@@ -13,7 +13,7 @@
 namespace simplex {
   namespace raycast {
 
-    enum class obj_type { SPHERE = 1, TORUS = 2, PLANE = 3 };
+    enum class obj_type { SPHERE = 1, TORUS = 2, CUBE = 3, TORUS82 = 4, HUNT1 = 5, HUNT2 = 6, TRIRISM = 7, TORUS8 = 8, SPHERE4 = 9 };
 
     class raymarch : public drawable, public asset_aware {
     public:
