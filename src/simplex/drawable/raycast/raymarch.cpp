@@ -21,10 +21,10 @@ namespace simplex {
       }
       rm_shader = &loaders.shaders["raymarch"];
 
-      if (!loaders.drawables.has("2d_quad11")) {
-        LOG(FATAL) << "2d_quad11 required!";
+      if (!loaders.drawables.has("cube1")) {
+        LOG(FATAL) << "cube1 required!";
       }
-      quad = &loaders.drawables["2d_quad11"];
+      quad = &loaders.drawables["cube1"];
     }
 
     void raymarch::render()
@@ -38,6 +38,7 @@ namespace simplex {
       rm_shader->uniform_mat4x4("modelI", glm::inverse(model_mat));
       //rm_shader->uniform_int("DO_REFINE", 5);
       rm_shader->uniform_int("object_type", static_cast<int>(type));
+      rm_shader->uniform_vec3f("screen_size", glm::vec3(800,800,0));
 
       sun.modify(*rm_shader);
 

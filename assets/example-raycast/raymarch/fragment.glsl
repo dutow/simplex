@@ -1,7 +1,7 @@
 #version 420
 
 // pipeline-ból bejövõ per-fragment attribútumok
-in vec3	 vs_out_pos;
+vec3	 vs_out_pos;
 
 // kimenõ érték - a fragment színe
 out vec4 fs_out_col;
@@ -17,6 +17,8 @@ uniform mat4 view;
 
 // objects are ALWAYS centered at 0,0,0
 uniform vec3 center = vec3(0,0,0);
+
+uniform vec3 screen_size;
 
 uniform vec3 sun_direction;
 uniform vec3 sun_color;
@@ -184,14 +186,18 @@ uniform float INC = 1/16.0f;
 
 void main()
 {
-	int steps = 20;
+	//fs_out_col = vec4(1,1,1,1);
+	int steps = 30;
 	vec3 rayOrig, rayDir;
 
+	vs_out_pos.x = (gl_FragCoord.x / screen_size.x) *2 -1;
+	vs_out_pos.y = (gl_FragCoord.y / screen_size.y) *2 -1;
+	
 	getRay(vs_out_pos, rayOrig, rayDir);
 
 	rayOrig = (modelI * vec4(rayOrig, 1) ).xyz;
 	rayDir  = (modelI * vec4(rayDir,  0) ).xyz;
-
+	
 	// raymarch - scene is around 120x120
 	float t = 0;
 	while ( obj_curr( rayOrig + t*rayDir ) > 0 && t < steps )
@@ -201,12 +207,13 @@ void main()
 
 	// ha tul messze van
 	if ( t >= steps ) {
-		discard;
+	    discard;
 	}
 
 	// ha mogottunk van a metszespont, akkor dobjuk el a fragmentet
-	if ( t < 0 )
+	if ( t < 0 ) {
 		discard;
+	}
 
 	// különben számítsuk ki a metszéspontot
 	vec3 intersectionPoint = rayOrig + t*rayDir;

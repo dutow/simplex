@@ -52,6 +52,7 @@ public:
     rc_raymarch = std::make_unique<simplex::raycast::raymarch>(simplex::raycast::obj_type::SPHERE, cam, sun);
     rc_raymarch->load_assets(assets);
 
+    angle_diff = 0;
 
     campos = cam.get_camera_position();
     }
@@ -84,13 +85,19 @@ public:
     assets.drawables["suzanne"].render();
 
     
+    angle_diff += elapsed_microseconds;
+    
+    float diff = (angle_diff % 120000000) / 120000000.0f * 6.28f;
+
     for (int i = 1; i <= 9; i++) {
       rc_raymarch->change_type(static_cast<simplex::raycast::obj_type>(i));
       for (int n = 1; n <= 3; n++) {
-        glm::vec3 p = glm::rotateY(glm::vec3(7.0f * n, 1.0f, 0.0f), 2 * 3.14f / 9.0f * i);
+        
+        glm::vec3 p = glm::rotateY(glm::vec3(5.0f * n, 10.0f, 0.0f), (2 * 3.14f / 9.0f * i) + diff);
         p.x += campos.x;
         p.z += campos.z;
-        terrain->ensure_above_terrain(p);
+        p.y = 15.0f;
+        //terrain->ensure_above_terrain(p, false);
         rc_raymarch->change_model_mat(glm::translate<float>(p));
         rc_raymarch->render();
       }
@@ -114,6 +121,8 @@ private:
   std::unique_ptr<simplex::raycast::raymarch> rc_raymarch;
 
   glm::vec3 campos;
+
+  uint64_t angle_diff;
 };
 
 int main(int argc, char** argv) {

@@ -14,25 +14,14 @@ namespace simplex {
     {
 
       float  vertices[][3] = {
-        { 0.0f, 0.0f, 0.0f },
-        { 0.0f, 0.0f, length },
-        { 0.0f, length, 0.0f },
-        { 0.0f, length, length },
-        { length, 0.0f, 0.0f },
-        { length, 0.0f, length },
-        { length, length, 0.0f },
-        { length, length, length },
-      };
-
-      float  normals[][3] = {
-        { 0.0f, 0.0f, 0.0f },
-        { 0.0f, 0.0f, 1.0f },
-        { 0.0f, 1.0f, 0.0f },
-        { 0.0f, 1.0f, 1.0f },
-        { 1.0f, 0.0f, 0.0f },
-        { 1.0f, 0.0f, 1.0f },
-        { 1.0f, 1.0f, 0.0f },
-        { 1.0f, 1.0f, 1.0f },
+        { -length/2, -length/2, -length/2 },
+        { -length/2, -length/2, length/2 },
+        { -length/2, length/2, -length/2 },
+        { -length/2, length/2, length/2 },
+        { length/2, -length/2, -length/2 },
+        { length/2, -length/2, length/2 },
+        { length/2, length/2, -length/2 },
+        { length/2, length/2, length/2 },
       };
 
       uint16_t  indices[] = {
@@ -58,10 +47,6 @@ namespace simplex {
       glGenBuffers(1, &vertex_vbo_id);
       glBindBuffer(GL_ARRAY_BUFFER, vertex_vbo_id);
       glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices[0], GL_STATIC_DRAW);
-
-      glGenBuffers(1, &normal_vbo_id);
-      glBindBuffer(GL_ARRAY_BUFFER, normal_vbo_id);
-      glBufferData(GL_ARRAY_BUFFER, sizeof(normals), &normals[0], GL_STATIC_DRAW);
 
       //glGenBuffers(1, &texcoord_vbo_id);
       //glBindBuffer(GL_ARRAY_BUFFER, texcoord_vbo_id);
