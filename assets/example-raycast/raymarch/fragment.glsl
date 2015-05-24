@@ -187,7 +187,7 @@ uniform float INC = 1/16.0f;
 void main()
 {
 	//fs_out_col = vec4(1,1,1,1);
-	int steps = 30;
+	int steps = 70;
 	vec3 rayOrig, rayDir;
 
 	vs_out_pos.x = (gl_FragCoord.x / screen_size.x) *2 -1;
@@ -199,6 +199,7 @@ void main()
 	rayDir  = (modelI * vec4(rayDir,  0) ).xyz;
 	
 	// raymarch - scene is around 120x120
+	
 	float t = 0;
 	while ( obj_curr( rayOrig + t*rayDir ) > 0 && t < steps )
 	{
@@ -207,7 +208,7 @@ void main()
 
 	// ha tul messze van
 	if ( t >= steps ) {
-	    discard;
+		discard;
 	}
 
 	// ha mogottunk van a metszespont, akkor dobjuk el a fragmentet

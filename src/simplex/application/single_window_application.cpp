@@ -26,7 +26,7 @@ single_window_application::single_window_application(std::wstring title, unsigne
     // add the 0..1 quad to the drawables, it's always useful
     assets.drawables.add("2d_quad01", std::make_unique<primitive2d::quad>(glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f)));
     assets.drawables.add("2d_quad11", std::make_unique<primitive2d::quad>(glm::vec2(-1.0f, -1.0f), glm::vec2(1.0f, 1.0f)));
-    assets.drawables.add("cube1", std::make_unique<primitive3d::cube>(0.2f));
+    assets.drawables.add("cube1", std::make_unique<primitive3d::cube>(4.0f));
 }
 
 void single_window_application::run() {

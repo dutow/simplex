@@ -29,7 +29,6 @@ public:
     cam.register_input_handlers(event_handlers, app_window);
 
     assets.drawables.add("sphere1", std::make_unique<simplex::primitive3d::sphere>( 30.0f, 32, 32 ));
-    assets.drawables.add("cube1", std::make_unique<simplex::primitive3d::cube>(20.0f));
     assets.drawables.add("suzanne", std::make_unique<simplex::primitive3d::objfile>(asset_loader->load_asset("suzanne.obj")));
 
     assets.shaders.add("standard");
@@ -69,22 +68,7 @@ public:
     glEnable(GL_DEPTH_TEST);
     
     terrain->render();
-
-
-    // draw a suzanne
-    
-
-    auto& std_shader = assets.shaders["standard"];
-    std_shader.activate();
-    std_shader.uniform_mat4x4("camera", cam.get_mvp_matrix());
-    sun.modify(std_shader);
-
-    assets.textures["suzanne.png"].bind(simplex::texture::unit::UNIT0);
-    std_shader.uniform_int("tex_diffuse", 0);
-
-    assets.drawables["suzanne"].render();
-
-    
+        
     angle_diff += elapsed_microseconds;
     
     float diff = (angle_diff % 120000000) / 120000000.0f * 6.28f;
@@ -101,6 +85,25 @@ public:
         rc_raymarch->change_model_mat(glm::translate<float>(p));
         rc_raymarch->render();
       }
+    }
+
+    auto& std_shader = assets.shaders["standard"];
+    std_shader.activate();
+    std_shader.uniform_mat4x4("camera", cam.get_mvp_matrix());
+    sun.modify(std_shader);
+
+    assets.textures["suzanne.png"].bind(simplex::texture::unit::UNIT0);
+    std_shader.uniform_int("tex_diffuse", 0);
+
+    for (int i = 1; i <= 9; i++) {
+
+      glm::vec3 p = glm::rotateY(glm::vec3(5.0f * 4, 10.0f, 0.0f), (2 * 3.14f / 9.0f * i) + diff);
+      p.x += campos.x;
+      p.z += campos.z;
+      p.y = 15.0f;
+
+      std_shader.uniform_mat4x4("model", glm::translate<float>(p));
+      assets.drawables["suzanne"].render();
     }
 
   }
