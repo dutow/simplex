@@ -36,7 +36,7 @@ namespace simplex {
 
     private:
       world3d::camera& camera;
-      world3d::uniform_sun sun;
+      world3d::uniform_sun& sun;
 
       texture& terrain_heightmap;
 

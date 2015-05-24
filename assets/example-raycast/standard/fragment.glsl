@@ -9,11 +9,63 @@ in vec2 texcoord;
 
 uniform sampler2D tex_diffuse;
 
-uniform vec3 sun_direction;
-uniform vec3 sun_color;
-uniform float sun_intensity;
+uniform vec3 cameraPosition;
 
-uniform vec3 light_position;
+////////////////////////////////////////////
+// LIGHTING
+
+uniform vec3 materialSpecularColor = vec3(1);
+uniform float materialShininess = 0.3f;
+
+#define MAX_LIGHTS 10
+uniform int numLights = 0;
+uniform struct Light {
+   vec4 position; // w=0 means directional light
+   vec3 intensities; //a.k.a the color of the light
+   float attenuation;
+   float ambientCoefficient;
+   float coneAngle;
+   vec3 coneDirection;
+} allLights[MAX_LIGHTS];
+
+vec3 ApplyLight(Light light, vec3 surfaceColor, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera) {
+    vec3 surfaceToLight;
+    float attenuation = 1.0;
+    if(light.position.w == 0.0) {
+        //directional light
+        surfaceToLight = normalize(light.position.xyz);
+        attenuation = 1.0; //no attenuation for directional lights
+    } else {
+        //point light
+        surfaceToLight = normalize(light.position.xyz - surfacePos);
+        float distanceToLight = length(light.position.xyz - surfacePos);
+        attenuation = 1.0 / (1.0 + light.attenuation * pow(distanceToLight, 2));
+
+        //cone restrictions (affects attenuation)
+        float lightToSurfaceAngle = degrees(acos(dot(-surfaceToLight, normalize(light.coneDirection))));
+        if(lightToSurfaceAngle > light.coneAngle){
+            attenuation = 0.0;
+        }
+    }
+
+    //ambient
+    vec3 ambient = light.ambientCoefficient * surfaceColor.rgb * light.intensities;
+
+    //diffuse
+    float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight));
+    vec3 diffuse = diffuseCoefficient * surfaceColor.rgb * light.intensities;
+    
+    //specular
+    float specularCoefficient = 0.0;
+    if(diffuseCoefficient > 0.0)
+        specularCoefficient = pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, normal))), materialShininess);
+    vec3 specular = specularCoefficient * materialSpecularColor * light.intensities;
+
+    //linear color (color before gamma correction)
+    return ambient + attenuation*(diffuse + specular);
+}
+
+/////////////////////////////////////////////
 
 void main()
 {
@@ -25,24 +77,11 @@ void main()
 	// intersectionPoint - felszin, modelspace
 	// 
 	
-	vec4 point_light = vec4(0.0);
-	
-	vec3 light_dir = light_position.xyz - eye.xyz;
-	float light_dist = length(light_dir);
-	light_dir = normalize(light_dir);
-	float light_diffuse = max(0.0, dot(normal.xyz, -light_dir));
-	// const + lin + exp
-	float light_atttotal = 0.1 + 0.05*light_dist; + 0.1 * light_dist * light_dist;
-	point_light = vec4(0.65,0.65,0.5,1) * (light_diffuse + 0.2) / light_atttotal;
-	//point_light = vec4(light_diffuse);
-	
-	// nap
-	vec3 toLight = normalize(sun_direction);
-	vec4 diffuseColor = vec4(clamp( dot(normal.xyz, toLight), 0, 1 ));
-	diffuseColor.xyz *= sun_color;
-	vec4 sun_light = vec4(0.0);
-	sun_light.xyz = diffuseColor.xyz * sun_intensity;
-	
-	color *= max(sun_light + point_light, vec4(0.2f));
+	vec3 surfaceToCamera = normalize(cameraPosition - eye.xyz).xyz;
+	vec3 linearColor = vec3(0);
+	for(int i = 0; i < numLights; ++i){
+		linearColor += ApplyLight(allLights[i], color.rgb, normal.xyz, eye.xyz, surfaceToCamera);
+	}
+	color.xyz = linearColor;
 	
 }

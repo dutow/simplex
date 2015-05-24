@@ -22,9 +22,10 @@ namespace simplex {
       terrain_shader->activate();
       terrain_shader->uniform_int("terrain", 0);
       terrain_shader->uniform_mat4x4("camera", camera.get_mvp_matrix());
+      terrain_shader->uniform_mat4x4("view", camera.get_view_matrix());
+      terrain_shader->uniform_vec3f("cameraPosition", camera.get_camera_position());
 
       sun.modify(*terrain_shader);
-
       terrain_plane->render();
     }
 

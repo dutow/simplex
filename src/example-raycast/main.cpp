@@ -54,6 +54,24 @@ public:
     angle_diff = 0;
 
     campos = cam.get_camera_position();
+
+    auto& camera_spot = sun.add_light(); // camera spotlight is always idx 1
+    camera_spot.intensities = glm::vec3(2, 0, 0); //strong white light
+    camera_spot.attenuation = 0.1f;
+    camera_spot.ambientCoefficient = 0.0f; //no ambient light
+    camera_spot.coneAngle = 30.0f;
+
+    glm::vec3 cp = cam.get_camera_position();
+    camera_spot.position = glm::vec4(cp.x, cp.y, cp.z, 1);
+    camera_spot.coneDirection = cam.get_camera_direction();
+
+    // center point light
+    auto& center_point = sun.add_light();
+    center_point.intensities = glm::vec3(1, 0, 1); //strong white light
+    center_point.attenuation = 0.1f;
+    center_point.ambientCoefficient = 0.0f; //no ambient light
+    center_point.coneAngle = 360.0f;
+    center_point.position = glm::vec4(campos.x, campos.y, campos.z, 1);
     }
 
   virtual void render(uint64_t elapsed_microseconds) override {
@@ -61,6 +79,11 @@ public:
     terrain->correct_camera_y();
     cam.update(elapsed_microseconds);
     sun.update(elapsed_microseconds);
+
+    auto& camera_spot = sun[1]; // camera spotlight is always idx 1
+    glm::vec3 cp = cam.get_camera_position();
+    camera_spot.position = glm::vec4(cp.x, cp.y, cp.z, 1);
+    camera_spot.coneDirection = cam.get_camera_direction();
 
     skybox->render();
 
@@ -77,7 +100,7 @@ public:
       rc_raymarch->change_type(static_cast<simplex::raycast::obj_type>(i));
       for (int n = 1; n <= 3; n++) {
         
-        glm::vec3 p = glm::rotateY(glm::vec3(7.0f * n, 10.0f, 0.0f), (2 * 3.14f / 10.0f * i) + diff);
+        glm::vec3 p = glm::rotateY(glm::vec3(7.0f * n, 10.0f, 0.0f), (2 * 3.14f / 10.0f * i) - diff);
         p.x += campos.x;
         p.z += campos.z;
         p.y = 15.0f;
@@ -91,7 +114,7 @@ public:
     std_shader.activate();
     std_shader.uniform_mat4x4("camera", cam.get_mvp_matrix());
     std_shader.uniform_mat4x4("view", cam.get_view_matrix());
-    std_shader.uniform_vec3f("light_position", campos);
+    //std_shader.uniform_vec3f("light_position", campos);
     sun.modify(std_shader);
 
     assets.textures["suzanne.png"].bind(simplex::texture::unit::UNIT0);
