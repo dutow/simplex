@@ -119,8 +119,7 @@ void free_camera::move_to(glm::vec3 position)
 {
   glm::vec3 direction = camera_look_at - camera_position;
   camera_position = position;
-  //camera_look_at = camera_position + direction;
-  camera_look_at = glm::vec3();
+  camera_look_at = camera_position + direction;
 }
 
 }

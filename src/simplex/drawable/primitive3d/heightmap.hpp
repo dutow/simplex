@@ -30,6 +30,10 @@ namespace simplex {
       // camera interaction stuff
       void move_camera_to_center();
 
+      void correct_camera_y();
+
+      void ensure_above_terrain(glm::vec3 &point, bool force=true);
+
     private:
       world3d::camera& camera;
       world3d::uniform_sun sun;
@@ -42,7 +46,10 @@ namespace simplex {
 
       shader* terrain_shader;
 
-      
+      std::vector<uint8_t> heights;
+      GLint width, height;
+
+      float value_at(int x, int y) const;
     };
   }
 } ///< .

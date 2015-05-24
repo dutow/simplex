@@ -55,6 +55,7 @@ public:
 
   virtual void render(uint64_t elapsed_microseconds) override {
     glDisable(GL_DEPTH_TEST);
+    terrain->correct_camera_y();
     cam.update(elapsed_microseconds);
     sun.update(elapsed_microseconds);
 
@@ -79,13 +80,18 @@ public:
 
     assets.drawables["suzanne"].render();
 
+    glm::vec3 pos;
 
     rc_raymarch->change_type(simplex::raycast::obj_type::SPHERE);
-    rc_raymarch->change_model_mat(glm::translate<float>(glm::vec3(-2.0f, 1.0f, 0.0f)));
+    pos = glm::vec3(10.0f, 1.0f, 10.0f);
+    terrain->ensure_above_terrain(pos);
+    rc_raymarch->change_model_mat(glm::translate<float>(pos));
     rc_raymarch->render();
 
     rc_raymarch->change_type(simplex::raycast::obj_type::TORUS);
-    rc_raymarch->change_model_mat(glm::translate<float>(glm::vec3(6.0f, 1.0f, 2.0f)));
+    pos = glm::vec3(16.0f, 1.0f, 10.0f);
+    terrain->ensure_above_terrain(pos);
+    rc_raymarch->change_model_mat(glm::translate<float>(pos));
     rc_raymarch->render();
   }
 

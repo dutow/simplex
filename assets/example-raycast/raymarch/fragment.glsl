@@ -97,13 +97,13 @@ void main()
 
 	// raymarch - scene is around 120x120
 	float t = 0;
-	while ( obj_curr( rayOrig + t*rayDir ) > 0 && t < 60 )
+	while ( obj_curr( rayOrig + t*rayDir ) > 0 && t < 80 )
 	{
 		t += INC;
 	}
 
 	// ha tul messze van
-	if ( t >= 60 ) {
+	if ( t >= 80 ) {
 		discard;
 	}
 
