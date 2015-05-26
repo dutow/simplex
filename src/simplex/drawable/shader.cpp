@@ -113,7 +113,8 @@ GLint shader::get_uniform_loc(std::string name) const
 {
 	GLint uniform_loc = glGetUniformLocation(program_id, name.c_str());
 	if (uniform_loc == -1) {
-		LOG(FATAL) << "Probably uniform not found? " << name;
+		LOG(TRACE) << "Uniform not found: " << name;
+    return -1;
 	}
 
 	return uniform_loc;
@@ -122,42 +123,49 @@ GLint shader::get_uniform_loc(std::string name) const
 void shader::uniform_vec2fv(std::string name, std::vector<glm::vec2> vertices)
 {
 	GLint uniform_loc = get_uniform_loc(name);
+  if (-1 == uniform_loc) return;
 	glUniform2fv(uniform_loc, static_cast<GLsizei>(vertices.size()), reinterpret_cast<GLfloat*>(&vertices[0]));
 }
 
 void shader::uniform_vec3fv(std::string name, std::vector<glm::vec3> vertices)
 {
 	GLint uniform_loc = get_uniform_loc(name);
+  if (-1 == uniform_loc) return;
 	glUniform3fv(uniform_loc, static_cast<GLsizei>(vertices.size()), reinterpret_cast<GLfloat*>(&vertices[0]));
 }
 
 void shader::uniform_vec4fv(std::string name, std::vector<glm::vec4> vertices)
 {
 	GLint uniform_loc = get_uniform_loc(name);
+  if (-1 == uniform_loc) return;
 	glUniform4fv(uniform_loc, static_cast<GLsizei>(vertices.size()), reinterpret_cast<GLfloat*>(&vertices[0]));
 }
 
 void shader::uniform_int(std::string name, int value)
 {
 	GLint uniform_loc = get_uniform_loc(name);
+  if (-1 == uniform_loc) return;
 	glUniform1i(uniform_loc, value);
 }
 
 void shader::uniform_float(std::string name, float value)
 {
   GLint uniform_loc = get_uniform_loc(name);
+  if (-1 == uniform_loc) return;
   glUniform1f(uniform_loc, value);
 }
 
 void shader::uniform_vec3f(std::string name, glm::vec3 vec3)
 {
   GLint uniform_loc = get_uniform_loc(name);
+  if (-1 == uniform_loc) return;
   glUniform3f(uniform_loc, vec3.x, vec3.y, vec3.z);
 }
 
 void shader::uniform_vec4f(std::string name, glm::vec4 vec4)
 {
   GLint uniform_loc = get_uniform_loc(name);
+  if (-1 == uniform_loc) return;
   glUniform4f(uniform_loc, vec4.x, vec4.y, vec4.z, vec4.w);
 }
 
