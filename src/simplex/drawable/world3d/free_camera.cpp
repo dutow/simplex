@@ -98,7 +98,7 @@ void free_camera::register_input_handlers(simplex::event_handlers& handlers, sim
       
       if (mouse_control.coord_changed) {
         
-        camera_heading = static_cast<float>(mouse_control.coord.x) / 180.0f * 3.14f * (static_cast<float>(elapsed_inmicrosec) / 1000000.0f) * ROTATION_FACTOR;
+        camera_heading = - static_cast<float>(mouse_control.coord.x) / 180.0f * 3.14f * (static_cast<float>(elapsed_inmicrosec) / 1000000.0f) * ROTATION_FACTOR;
         camera_pitch = static_cast<float>(mouse_control.coord.y) / 180.0f * 3.14f * (static_cast<float>(elapsed_inmicrosec) / 1000000.0f) * ROTATION_FACTOR;
 
         glm::vec3 axis = glm::cross(get_camera_direction(), get_camera_up());
