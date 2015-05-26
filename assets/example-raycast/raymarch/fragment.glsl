@@ -23,61 +23,7 @@ uniform int object_type;
 
 uniform float INC = 1/16.0f;
 
-////////////////////////////////////////////
-// LIGHTING
-
-uniform vec3 materialSpecularColor = vec3(1);
-uniform float materialShininess = 0.3f;
-
-#define MAX_LIGHTS 10
-uniform int numLights = 0;
-uniform struct Light {
-   vec4 position; // w=0 means directional light
-   vec3 intensities; //a.k.a the color of the light
-   float attenuation;
-   float ambientCoefficient;
-   float coneAngle;
-   vec3 coneDirection;
-} allLights[MAX_LIGHTS];
-
-vec3 ApplyLight(Light light, vec3 surfaceColor, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera) {
-    vec3 surfaceToLight;
-    float attenuation = 1.0;
-    if(light.position.w == 0.0) {
-        //directional light
-        surfaceToLight = normalize(light.position.xyz);
-        attenuation = 1.0; //no attenuation for directional lights
-    } else {
-        //point light
-        surfaceToLight = normalize(light.position.xyz - surfacePos);
-        float distanceToLight = length(light.position.xyz - surfacePos);
-        attenuation = 1.0 / (1.0 + light.attenuation * pow(distanceToLight, 2));
-
-        //cone restrictions (affects attenuation)
-        float lightToSurfaceAngle = degrees(acos(dot(-surfaceToLight, normalize(light.coneDirection))));
-        if(lightToSurfaceAngle > light.coneAngle){
-            attenuation = 0.0;
-        }
-    }
-
-    //ambient
-    vec3 ambient = light.ambientCoefficient * surfaceColor.rgb * light.intensities;
-
-    //diffuse
-    float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight));
-    vec3 diffuse = diffuseCoefficient * surfaceColor.rgb * light.intensities;
-    
-    //specular
-    float specularCoefficient = 0.0;
-    if(diffuseCoefficient > 0.0)
-        specularCoefficient = pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, normal))), materialShininess);
-    vec3 specular = specularCoefficient * materialSpecularColor * light.intensities;
-
-    //linear color (color before gamma correction)
-    return ambient + attenuation*(diffuse + specular);
-}
-
-/////////////////////////////////////////////
+#include "/common/lighting/fragment.glsl"
 
 const float epsilon = 0.0001;
 
@@ -94,49 +40,6 @@ void getRay(in vec3 inVec, out vec3 rayOrig, out vec3 rayDir)
 	// a sugár iránya innen trivi
 	vec3 rayEnd = farPt.xyz/farPt.w;
 	rayDir  = normalize( rayEnd - rayOrig  );
-}
-
-float obj_cube(vec3 p) // ^1
-{
-	vec3 d = abs(p) - 1;
-	return min(max(d.x,max(d.y,d.z)),0.0) + length(max(d,0.0));
-}
-
-float obj_triprism(vec3 p) // ^1
-{
-	vec3 h = vec3(1,1,1);
-	vec3 q = abs(p);
-    return max(q.z-h.y,max(q.x*0.866025+p.y*0.5,-p.y)-h.x*0.5);
-}
-
-
-float obj_sphere(vec3 p) // ^2
-{
-	return length(p) - 1;
-}
-
-float obj_torus(vec3 p) // ^2
-{
-	vec2 t = vec2(1,0.3);
-	vec2 q = vec2(length(p.xy)-t.x,p.z);
-    return length(q)-t.y;
-}
-
-float obj_hunt1(vec3 p) // ^3
-{
-	if (length(p) > 2) return 1;
-/*	float pa = p.x*p.z;
-	float pb = p.x+p.z;
-	float pc = p.y*p.y - p.x*p.x;
-	return pa+pb*pc;*/
-	
-	return p.x * p.z + p.y*p.y*p.z + pow(p.x,3);
-}
-
-float obj_hunt2(vec3 p) // ^3
-{
-	if (length(p) > 2) return 1;
-	return p.x * p.z + pow(p.y,3);
 }
 
 // higher order length functions
@@ -158,24 +61,7 @@ float length4v3( vec3 p )
 	return pow( p.x + p.y + p.z, 1.0/4.0 );
 }
 
-float obj_torus82( vec3 p ) // ^8 (length)
-{
-  vec2 t = vec2(1,0.3);
-  vec2 q = vec2(length2(p.xz)-t.x,p.y);
-  return length8(q)-t.y;
-}
-
-float obj_torus88( vec3 p) // ^8 (length)
-{
-  vec2 t = vec2(1,0.3);
-  vec2 q = vec2(length8(p.xz)-t.x,p.y);
-  return length8(q)-t.y;
-}
-
-float obj_sphere4(vec3 p) // ^4 - alias rounded box
-{
-	return length4v3(p) - 1;
-}
+#include "objects.glsl"
 
 // operators
 

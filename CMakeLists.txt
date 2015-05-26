@@ -44,7 +44,7 @@ FIND_PACKAGE( EASYLOGGING REQUIRED )
 INCLUDE_DIRECTORIES( "${EASYLOGGING_INCLUDE_DIR}" )
 
 INCLUDE( FindBoost )
-FIND_PACKAGE( Boost REQUIRED COMPONENTS date_time filesystem iostreams system)
+FIND_PACKAGE( Boost REQUIRED COMPONENTS date_time filesystem iostreams system regex)
 INCLUDE_DIRECTORIES( "${Boost_INCLUDE_DIR}" )
 ADD_DEFINITIONS("-DBOOST_ALL_NO_LIB") # disable autolinking, it tries to find wrong files
 LIST(

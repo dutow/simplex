@@ -5,7 +5,6 @@
 
 #include "simplex/drawable/shader_source.hpp"
 #include "simplex/assets/asset_loader.hpp"
-#include "simplex/error/asset_not_found_error.hpp"
 
 namespace simplex {
 
@@ -27,28 +26,31 @@ namespace simplex {
      * Path of a directory containing the shader files (vertex.glsl and
      * fragment.glsl).
      */
-    asset_shader_source(asset_loader const& assets, asset_loader::path parent_path) : assets(assets), parent_path(parent_path) {
-      if (!assets.asset_exists(parent_path / "vertex.glsl")) {
-        auto exc = new asset_not_found_error((parent_path / "vertex.glsl").string());
-        LOG(FATAL) << *exc;
-        throw exc;
-      }
-      if (!assets.asset_exists(parent_path / "fragment.glsl")) {
-        auto exc = new asset_not_found_error((parent_path / "vertex.glsl").string());
-        LOG(FATAL) << *exc;
-        throw exc;
-      }
-    }
+    asset_shader_source(asset_loader const& assets, asset_loader::path parent_path);
+    
     /** Destructor. */
-    virtual ~asset_shader_source(){};
+    virtual ~asset_shader_source();
 
-    virtual std::string name() { return parent_path.string(); }
+    virtual std::string name();
 
-    virtual std::string vertex_shader() { return assets.load_asset(parent_path / "vertex.glsl"); }
-    virtual std::string fragment_shader() { return assets.load_asset(parent_path / "fragment.glsl"); }
+    virtual std::string vertex_shader();
+    virtual std::string fragment_shader();
 
   private:
     asset_loader const& assets;
     asset_loader::path parent_path;
+
+    /**
+     * Loads the file, and processes some custom preprocessor directives - currently only #include.
+     * 
+     * Supports: #include "a.glsl" - relative, "/a.glsl" - from asset root
+     * 
+     * TODO #pragma once
+     *
+     * @param asset_path Full pathname of the asset file.
+     */
+    std::string  process_file(asset_loader::path asset_path) const;
+
+    asset_loader::path lookup_file(asset_loader::path source, std::string name) const;
   };
 }
