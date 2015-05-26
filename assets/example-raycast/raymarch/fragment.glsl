@@ -178,7 +178,7 @@ void main()
 	
 	vec3 surfaceToCamera = normalize(cameraPosition - intersectionPoint);
 	vec3 linearColor = vec3(0);
-	for(int i = 0; i < numLights; ++i){
+	for(int i = 1; i < numLights; ++i){
 		vec3 surfaceColor = vec3(0.6, 0.3, 0.8); // TODO
 		linearColor += ApplyLight(allLights[i], surfaceColor.rgb, surfaceNormal, intersectionPoint, surfaceToCamera);
 	}

@@ -17,7 +17,7 @@ void main(){
   vec4 v = vec4(vp.x, texture(terrain, texcoord).a, vp.y, 1.0);
   
   gl_Position = v;
-  eye = -(view * v);
+  eye = v;
   vert = v;
   gl_Position = camera * gl_Position;
 

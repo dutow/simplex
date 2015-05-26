@@ -3,6 +3,7 @@
 
 #include <sstream>
 #include <glm/gtx/rotate_vector.hpp>
+#include <easylogging++.h>
 
 #include "simplex/drawable/shader.hpp"
 
@@ -34,6 +35,7 @@ namespace simplex {
     {
       sun_color = glm::vec3(0.4, 0.3, 0.1);
       sun_indensity = 0.8f;
+      lights.resize(1); // sun
     }
 
 
@@ -62,6 +64,7 @@ namespace simplex {
     light& uniform_sun::add_light(light l /*= light()*/)
     {
       lights.push_back(l);
+      LOG(TRACE) << lights.size();
       return lights[lights.size() - 1];
     }
 

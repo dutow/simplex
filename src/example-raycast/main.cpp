@@ -54,25 +54,26 @@ public:
     angle_diff = 0;
 
     campos = cam.get_camera_position();
-    /*
+    
     auto& camera_spot = sun.add_light(); // camera spotlight is always idx 1
-    camera_spot.intensities = glm::vec3(2, 0, 0); //strong white light
-    camera_spot.attenuation = 0.1f;
+    camera_spot.intensities = glm::vec3(1, 0, 0); //strong white light
+    camera_spot.attenuation = 0.0001f;
     camera_spot.ambientCoefficient = 0.0f; //no ambient light
-    camera_spot.coneAngle = 30.0f;
+    camera_spot.coneAngle = 5.0f;
 
     glm::vec3 cp = cam.get_camera_position();
-    camera_spot.position = glm::vec4(cp.x, cp.y, cp.z, 1);
+    camera_spot.position = glm::vec4(cp.x, cp.y - 0.4, cp.z, 1); // slightly below camera for more fun
     camera_spot.coneDirection = cam.get_camera_direction();
-    */
+    /*
     // center point light
     auto& center_point = sun.add_light();
-    center_point.intensities = glm::vec3(1, 0, 1); //strong white light
-    center_point.attenuation = 0.1f;
-    center_point.ambientCoefficient = 0.5f; //no ambient light
+    center_point.intensities = glm::vec3(1.75, 0, 0); //strong white light
+    center_point.attenuation = 0.0150f;
+    center_point.ambientCoefficient = 0.0f; //no ambient light
     center_point.coneAngle = 360.0f;
     terrain->correct_camera_y();
-    center_point.position = glm::vec4(campos.x, campos.y + 10, campos.z, 1);
+    center_point.position = glm::vec4(campos.x, campos.y + 30.0, campos.z, 1);
+    */
     }
 
   virtual void render(uint64_t elapsed_microseconds) override {
@@ -80,12 +81,12 @@ public:
     terrain->correct_camera_y();
     cam.update(elapsed_microseconds);
     sun.update(elapsed_microseconds);
-    /*
+    
     auto& camera_spot = sun[1]; // camera spotlight is always idx 1
     glm::vec3 cp = cam.get_camera_position();
-    camera_spot.position = glm::vec4(cp.x, cp.y, cp.z, 1);
+    camera_spot.position = glm::vec4(cp.x, cp.y - 0.4, cp.z, 1);
     camera_spot.coneDirection = cam.get_camera_direction();
-    */
+    
     skybox->render();
 
     glDepthFunc(GL_LESS);
