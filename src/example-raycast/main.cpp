@@ -44,7 +44,7 @@ public:
     skybox = std::make_unique<simplex::primitive3d::skybox>(assets.textures["cubemap.jpg"], cam);
     skybox->load_assets(assets);
         
-    terrain = std::make_unique<simplex::primitive3d::heightmap>(assets.textures["heightmap.png"], cam, sun, glm::vec2(128.0f, 128.0f));
+    terrain = std::make_unique<simplex::primitive3d::heightmap>(assets.textures["heightmap.png"], cam, sun, glm::vec2(1024.0f, 1024.0f));
     terrain->load_assets(assets);
     terrain->move_camera_to_center();
 
@@ -64,14 +64,15 @@ public:
     glm::vec3 cp = cam.get_camera_position();
     camera_spot.position = glm::vec4(cp.x, cp.y, cp.z, 1);
     camera_spot.coneDirection = cam.get_camera_direction();
-
+    */
     // center point light
     auto& center_point = sun.add_light();
     center_point.intensities = glm::vec3(1, 0, 1); //strong white light
     center_point.attenuation = 0.1f;
-    center_point.ambientCoefficient = 0.0f; //no ambient light
+    center_point.ambientCoefficient = 0.5f; //no ambient light
     center_point.coneAngle = 360.0f;
-    center_point.position = glm::vec4(campos.x, campos.y, campos.z, 1);*/
+    terrain->correct_camera_y();
+    center_point.position = glm::vec4(campos.x, campos.y + 10, campos.z, 1);
     }
 
   virtual void render(uint64_t elapsed_microseconds) override {
@@ -104,7 +105,7 @@ public:
         p.x += campos.x;
         p.z += campos.z;
         p.y = 15.0f;
-        //terrain->ensure_above_terrain(p, false);
+        terrain->ensure_above_terrain(p, true);
         rc_raymarch->change_model_mat(glm::translate<float>(p));
         rc_raymarch->render();
       }
@@ -125,7 +126,7 @@ public:
       p.x += campos.x;
       p.z += campos.z;
       p.y = 15.0f;
-
+      terrain->ensure_above_terrain(p, true);
       std_shader.uniform_mat4x4("model", glm::translate<float>(p));
       
       assets.drawables["suzanne"].render();

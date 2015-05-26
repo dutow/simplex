@@ -56,7 +56,7 @@ namespace simplex {
       lights[0].position.z = sun_direction.z;
       lights[0].position.w = 0;
       lights[0].intensities = sun_color;
-      lights[0].ambientCoefficient = 0.1f;
+      lights[0].ambientCoefficient = 0.7f;
     }
 
     light& uniform_sun::add_light(light l /*= light()*/)

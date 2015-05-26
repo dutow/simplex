@@ -12,8 +12,8 @@ out vec4 eye;
 out vec4 vert;
 
 void main(){
-  texcoord.x = vp.x / 512.0;
-  texcoord.y = vp.y / 512.0;
+  texcoord.x = vp.x / 1024.0;
+  texcoord.y = vp.y / 1024.0;
   vec4 v = vec4(vp.x, texture(terrain, texcoord).a, vp.y, 1.0);
   
   gl_Position = v;

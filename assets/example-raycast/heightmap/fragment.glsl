@@ -19,13 +19,13 @@ void main()
 	vec4 tx = texture(terrain, texcoord);
 
 	vec3 normal = tx.xyz;
+	float tx_norm = 0.3 + (tx.a / 256) * 0.7 * normal.y;
 
 	vec3 surfaceToCamera = normalize(cameraPosition - eye.xyz).xyz;
 	vec3 linearColor = vec3(0);
 	for(int i = 0; i < numLights; ++i){
-		linearColor += ApplyLight(allLights[i], color.rgb, normal.xyz, eye.xyz, surfaceToCamera);
+		linearColor += ApplyLight(allLights[i], vec3(tx_norm, tx_norm, tx_norm), normal.xyz, eye.xyz, surfaceToCamera);
 	}
 	color.xyz = linearColor;
-	color.xy = texcoord*2;
 }
 
