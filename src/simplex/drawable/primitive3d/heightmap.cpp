@@ -13,7 +13,7 @@
 namespace simplex {
   namespace primitive3d {
     heightmap::heightmap(texture& terrain_heightmap, world3d::camera& camera, world3d::uniform_sun& sun, glm::vec2 size) : camera(camera), sun(sun), terrain_heightmap(terrain_heightmap), size(size) {
-
+      postprocess_texture(terrain_heightmap, heights, width, height);
     }
 
     void heightmap::render() {
@@ -33,14 +33,6 @@ namespace simplex {
     {
       terrain_plane = std::make_unique<simplex::primitive2d::plane>(glm::vec2(0.0f, 0.0f), size, glm::ivec2(128, 128));
       
-      // read the texture data
-      terrain_heightmap.bind(simplex::texture::unit::UNIT0);
-      glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
-      glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
-      heights.resize(width*height * 4);
-
-      glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, &heights[0]);
-
       if (!loaders.shaders.has("heightmap")) {
         loaders.shaders.add("heightmap");
       }
@@ -106,7 +98,56 @@ namespace simplex {
 
     float heightmap::value_at(int x, int y) const
     {
-      return heights[y * width + x * 4] / 255.0f * 10.0f + 5.0f;
+      return heights[y * width + x];
+    }
+
+    void heightmap::postprocess_texture(texture& tex, std::vector<float>& heights, int& width, int& height)
+    {
+// src tex is 24bpp grayscale
+// a. convert it to rgb -> normal ; a -> height GL_RGBA32F texture
+// b. load heights into a memory array
+      // read the texture data
+      terrain_heightmap.bind(simplex::texture::unit::UNIT0);
+      glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
+      glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
+
+      std::vector<uint8_t> tmp_input(width*height * 4);
+      glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, &tmp_input[0]);
+      heights.resize(width*height);
+
+      std::vector<glm::vec4> tmp_texture(width*height);
+      for (int ih = 0; ih < height; ++ih) {
+        for (int iw = 0; iw < width; ++iw) {
+          tmp_texture[ih*width + iw].w = static_cast<float>(tmp_input[ih*width + iw * 4]) / 16.0f;
+          heights[ih*width + iw] = tmp_texture[ih*width + iw].w;
+        }
+      }
+
+      const int yScale = 1;
+      const int xzScale = 1;
+
+      for (int ih = 0; ih < height; ++ih) {
+        for (int iw = 0; iw < width; ++iw) {
+          int w1 = iw < width - 1 ? iw + 1 : iw;
+          int w2 = iw > 0 ? iw - 1 : iw;
+          float sx = tmp_texture[ih*width + w1].w - tmp_texture[ih*width + w2].w;
+
+          int h1 = ih < height- 1 ? ih + 1 : ih;
+          int h2 = ih > 0 ? ih - 1 : ih;
+          float sy = tmp_texture[h1*width + iw].w - tmp_texture[h2*width + iw].w;
+
+          glm::vec3 normal = glm::normalize(glm::vec3(-sx*yScale, 2 * xzScale, sy*yScale));
+          tmp_texture[ih*width + w1].x = normal.x;
+          tmp_texture[ih*width + w1].y = normal.y;
+          tmp_texture[ih*width + w1].z = normal.z;
+        }
+      }
+
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, width, height, 0, GL_RGBA, GL_FLOAT, &tmp_texture[0]);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
     }
 
   }

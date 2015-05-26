@@ -1,9 +1,10 @@
 
-#version 330 core
+#version 420 core
 
 out vec3 color;
 
 in vec4 eye;
+in vec4 vert;
 in vec2 texcoord;
 
 uniform sampler2D terrain;
@@ -69,11 +70,9 @@ vec3 ApplyLight(Light light, vec3 surfaceColor, vec3 normal, vec3 surfacePos, ve
 
 void main()
 {
-	float s11 = texture(terrain, texcoord).x;
-	color = vec3(1.0f,1.0f,1.0f) *  s11;
-	color.y = 0.3f;
-	
-	vec3 normal = normalize(vec3(0.0,1.0,0.0)); // TODO
+	vec4 tx = texture(terrain, texcoord);
+
+	vec3 normal = tx.xyz;
 
 	vec3 surfaceToCamera = normalize(cameraPosition - eye.xyz).xyz;
 	vec3 linearColor = vec3(0);
@@ -81,5 +80,6 @@ void main()
 		linearColor += ApplyLight(allLights[i], color.rgb, normal.xyz, eye.xyz, surfaceToCamera);
 	}
 	color.xyz = linearColor;
+	color.xy = texcoord*2;
 }
 

@@ -44,7 +44,7 @@ public:
     skybox = std::make_unique<simplex::primitive3d::skybox>(assets.textures["cubemap.jpg"], cam);
     skybox->load_assets(assets);
         
-    terrain = std::make_unique<simplex::primitive3d::heightmap>(assets.textures["heightmap.png"], cam, sun, glm::vec2(124.0f, 124.0f));
+    terrain = std::make_unique<simplex::primitive3d::heightmap>(assets.textures["heightmap.png"], cam, sun, glm::vec2(128.0f, 128.0f));
     terrain->load_assets(assets);
     terrain->move_camera_to_center();
 
@@ -54,7 +54,7 @@ public:
     angle_diff = 0;
 
     campos = cam.get_camera_position();
-
+    /*
     auto& camera_spot = sun.add_light(); // camera spotlight is always idx 1
     camera_spot.intensities = glm::vec3(2, 0, 0); //strong white light
     camera_spot.attenuation = 0.1f;
@@ -71,7 +71,7 @@ public:
     center_point.attenuation = 0.1f;
     center_point.ambientCoefficient = 0.0f; //no ambient light
     center_point.coneAngle = 360.0f;
-    center_point.position = glm::vec4(campos.x, campos.y, campos.z, 1);
+    center_point.position = glm::vec4(campos.x, campos.y, campos.z, 1);*/
     }
 
   virtual void render(uint64_t elapsed_microseconds) override {
@@ -79,12 +79,12 @@ public:
     terrain->correct_camera_y();
     cam.update(elapsed_microseconds);
     sun.update(elapsed_microseconds);
-
+    /*
     auto& camera_spot = sun[1]; // camera spotlight is always idx 1
     glm::vec3 cp = cam.get_camera_position();
     camera_spot.position = glm::vec4(cp.x, cp.y, cp.z, 1);
     camera_spot.coneDirection = cam.get_camera_direction();
-
+    */
     skybox->render();
 
     glDepthFunc(GL_LESS);

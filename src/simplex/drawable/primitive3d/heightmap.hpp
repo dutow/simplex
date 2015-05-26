@@ -46,10 +46,12 @@ namespace simplex {
 
       shader* terrain_shader;
 
-      std::vector<uint8_t> heights;
+      std::vector<float> heights;
       GLint width, height;
 
       float value_at(int x, int y) const;
+
+      void postprocess_texture(texture& tex, std::vector<float>& heights, int& width, int& height);
     };
   }
 } ///< .

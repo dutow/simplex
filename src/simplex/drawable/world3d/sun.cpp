@@ -45,7 +45,7 @@ namespace simplex {
         current_cycle_pos %= cycle_time_in_microsec;
       }
 
-      sun_direction = glm::rotateY(glm::vec3(1.0f, 1.0f, 0.0f), static_cast<float>(current_cycle_pos) / static_cast<float>(cycle_time_in_microsec) * 3.14f * 2.0f);
+      sun_direction = glm::rotateY(glm::vec3(1.0f, -1.0f, 0.0f), static_cast<float>(current_cycle_pos) / static_cast<float>(cycle_time_in_microsec) * 3.14f * 2.0f);
 
       if (lights.size() == 0) {
         lights.resize(1);
@@ -56,7 +56,7 @@ namespace simplex {
       lights[0].position.z = sun_direction.z;
       lights[0].position.w = 0;
       lights[0].intensities = sun_color;
-      lights[0].ambientCoefficient = 0.06f;
+      lights[0].ambientCoefficient = 0.1f;
     }
 
     light& uniform_sun::add_light(light l /*= light()*/)
