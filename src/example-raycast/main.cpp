@@ -74,7 +74,20 @@ public:
     terrain->correct_camera_y();
     center_point.position = glm::vec4(campos.x, campos.y + 30.0, campos.z, 1);
     
+    // add 5 more lights
+    for (int i = 1; i <=5; i++) {
+      glm::vec3 p = glm::rotateY(glm::vec3(7.0f * 3.5f, 10.0f, 0.0f), (2 * 3.14f / 5.0f * i));
+      p.x += campos.x;
+      p.z += campos.z;
+      terrain->ensure_above_terrain(p, true);
+      auto& cam_x = sun.add_light();
+      cam_x.intensities = glm::vec3(0.3f * (i % 3), 0.3f * ((i+1)%3), 0.3f * ((i+2)%3)); //strong white light
+      cam_x.attenuation = 0.050f;
+      cam_x.ambientCoefficient = 0.0f; //no ambient light
+      cam_x.coneAngle = 360.0f;
+      cam_x.position = glm::vec4(p.x, p.y + 5.0, p.z, 1);
     }
+  }
 
   virtual void render(uint64_t elapsed_microseconds) override {
     glDisable(GL_DEPTH_TEST);
