@@ -113,7 +113,7 @@ GLint shader::get_uniform_loc(std::string name) const
 {
 	GLint uniform_loc = glGetUniformLocation(program_id, name.c_str());
 	if (uniform_loc == -1) {
-		LOG(TRACE) << "Uniform not found: " << name;
+		//LOG(TRACE) << "Uniform not found: " << name;
     return -1;
 	}
 

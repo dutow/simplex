@@ -6,7 +6,8 @@
 #include <vector>
 #include <GL/glew.h>
 #include <glm/vec3.hpp>
-#include <fstream>
+#include <glm/geometric.hpp>
+#include <iostream>
 
 #include "simplex/drawable/primitive2d/plane.hpp"
 #include "simplex/drawable/world3d/free_camera.hpp"
@@ -143,27 +144,22 @@ namespace simplex {
       const int yScale = 1;
       const int xzScale = 1;
 
-      std::ofstream ofs("tmp.tex");
-
       for (int ih = 0; ih < height; ++ih) {
         for (int iw = 0; iw < width; ++iw) {
           int w1 = iw < width - 1 ? iw + 1 : iw;
           int w2 = iw > 0 ? iw - 1 : iw;
-          float sx = tmp_texture[ih*width + w1].w - tmp_texture[ih*width + w2].w;
-
           int h1 = ih < height- 1 ? ih + 1 : ih;
           int h2 = ih > 0 ? ih - 1 : ih;
-          float sy = tmp_texture[h1*width + iw].w - tmp_texture[h2*width + iw].w;
+          glm::vec3 s1 = glm::vec3(1.0, (tmp_texture[ih*width + w1].a - tmp_texture[ih*width + w2].a), 0.0);
+          glm::vec3 s2 = glm::vec3(0.0, (tmp_texture[h1*width + iw].a - tmp_texture[h2*width + iw].a), 1.0);
 
-          glm::vec3 normal = glm::normalize(glm::vec3(-sx*yScale, 2 * xzScale, sy*yScale));
+          glm::vec3 normal = glm::normalize(glm::cross(s1,s2));
+          //std::cout << normal.y << std::endl;
           tmp_texture[ih*width + w1].x = normal.x;
-          tmp_texture[ih*width + w1].y = normal.y;
+          tmp_texture[ih*width + w1].y = abs(normal.y);
           tmp_texture[ih*width + w1].z = normal.z;
-          ofs << tmp_texture[ih*width + w1].a << std::endl;
         }
       }
-
-      ofs.close();
 
       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, width, height, 0, GL_RGBA, GL_FLOAT, &tmp_texture[0]);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);

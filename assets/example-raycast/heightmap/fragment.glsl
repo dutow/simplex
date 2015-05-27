@@ -19,7 +19,7 @@ void main()
 	vec4 tx = texture(terrain, texcoord);
 
 	vec3 normal = tx.xyz;
-	float tx_norm = 0.2 + (0.1 * normal.y) + (tx.a / 256) * 0.7;
+	float tx_norm = 0.2 + (0.2 * normal.y) + (tx.a / 256) * 0.6;
 
 	vec3 surfaceToCamera = normalize(cameraPosition - eye.xyz).xyz;
 	vec3 linearColor = vec3(0);
@@ -27,6 +27,5 @@ void main()
 		linearColor += ApplyLight(allLights[i], vec3(tx_norm, tx_norm, tx_norm), normal.xyz, eye.xyz, surfaceToCamera);
 	}
 	color.xyz = linearColor;
-	//color.xyz = vec3(length(allLights[1].position.xyz - eye.xyz) / 100);
 }
 

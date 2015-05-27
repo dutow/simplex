@@ -64,7 +64,7 @@ public:
     glm::vec3 cp = cam.get_camera_position();
     camera_spot.position = glm::vec4(cp.x, cp.y - 0.4, cp.z, 1); // slightly below camera for more fun
     camera_spot.coneDirection = cam.get_camera_direction();
-    /*
+    
     // center point light
     auto& center_point = sun.add_light();
     center_point.intensities = glm::vec3(1.75, 0, 0); //strong white light
@@ -73,7 +73,7 @@ public:
     center_point.coneAngle = 360.0f;
     terrain->correct_camera_y();
     center_point.position = glm::vec4(campos.x, campos.y + 30.0, campos.z, 1);
-    */
+    
     }
 
   virtual void render(uint64_t elapsed_microseconds) override {
